@@ -1,7 +1,7 @@
-﻿<Application x:Class="NudelClient.App"
+﻿<Application x:Class="Nudel.Client.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:NudelClient"
+             xmlns:local="clr-namespace:Nudel.Client"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          
