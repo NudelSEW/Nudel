@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BF798A6A-45DF-46CB-B483-681CABBC4D73}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>NudelBackend</RootNamespace>
+    <RootNamespace>Nudel.Backend</RootNamespace>
     <AssemblyName>NudelBackend</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
