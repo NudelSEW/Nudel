@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NudelClient.Views
+namespace Nudel.Client.Views
 {
     /// <summary>
     /// Interaction logic for LoginView.xaml
