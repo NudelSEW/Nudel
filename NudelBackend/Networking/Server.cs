@@ -9,7 +9,8 @@ using System.Threading;
 namespace Nudel.Backend.Networking
 {
     public delegate void LogHandler(string data);
-    public delegate void ReceivedHandler(string data, string sender);
+    public delegate void ReceivedHandler(string data, Socket client);
+    public delegate void AcceptedHandler(Socket client);
 
     public class Server
     {
@@ -20,9 +21,10 @@ namespace Nudel.Backend.Networking
 
         public event LogHandler Log;
         public event ReceivedHandler Received;
+        public event AcceptedHandler Accepted;
 
         private Socket socket;
-        private static List<Client> clients;
+        private List<Socket> clients;
         private int port;
         private byte[] buffer = new byte[BUFFER_SIZE];
 
@@ -31,7 +33,7 @@ namespace Nudel.Backend.Networking
         {
             this.port = port;
 
-            users = new List<Client>();
+            clients = new List<Client>();
         }
 
         public void Start()
@@ -55,10 +57,10 @@ namespace Nudel.Backend.Networking
         }
         public void Stop()
         {
-            foreach (Client client in clients)
+            foreach (Socket client in clients)
             {
-                client.Socket.Shutdown(SocketShutdown.Both);
-                client.Socket.Close();
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
             }
 
             socket.Close();
@@ -71,13 +73,17 @@ namespace Nudel.Backend.Networking
             try
             {
                 clientSocket = socket.EndAccept(AR);
-                clients.Add(new Client(clientSocket));
+                clients.Add(clientSocket);
+
+                Log?.Invoke(((IPEndPoint)clientSocket.RemoteEndPoint).Address + " connected");
             }
-            catch (ObjectDisposedException) // I cannot seem to avoid this (on exit when properly closing sockets)
+            catch (ObjectDisposedException)
             {
                 return;
             }
+
             socket.BeginAccept(Accept, null);
+
             clientSocket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, clientSocket);
         }
         private void Receive(IAsyncResult AR)
@@ -92,12 +98,12 @@ namespace Nudel.Backend.Networking
             catch (SocketException)
             {
                 // Don't shutdown because the socket may be disposed and its disconnected anyway.
-                foreach (Client user in users)
+                foreach (Socket client in clients)
                 {
-                    if (user.Socket == clientSocket)
+                    if (client == clientSocket)
                     {
-                        Log?.Invoke(user.Username + " disconnected");
-                        users.Remove(user);
+                        Log?.Invoke(((IPEndPoint)client.RemoteEndPoint).Address + " disconnected");
+                        clients.Remove(client);
                     }
                 }
                 clientSocket.Close();
@@ -107,63 +113,25 @@ namespace Nudel.Backend.Networking
 
             byte[] recBuf = new byte[received];
             Array.Copy(buffer, recBuf, received);
-            string text = Encoding.ASCII.GetString(recBuf);
-            if (text.Substring(0, 1) == "!")
-            {
-                ValidateCommand(text, clientSocket);
-            }
-            else
-            {
-                Client sourceUser = null;
+            string data = Encoding.ASCII.GetString(recBuf);
 
-                foreach (Client user in users)
-                {
-                    if (user.Socket == clientSocket)
-                        sourceUser = user;
-                }
-                if (sourceUser == null)
-                    throw new UserNotFoundException("User not found");
+            Received?.Invoke(data, clientSocket);
 
-                SendMessageToOthers(text, sourceUser);
-            }
-            clientSocket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveData, clientSocket);
+            clientSocket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, clientSocket);
         }
-        public void Send(String data)
+        public void Send(string data, Socket clientSocket)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(data);
-            foreach (Client user in users)
-            {
-                user.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-            }
-        }
-        public void SendMessageToOthers(String message, Client sourceUser)
-        {
-            byte[] buffer = Encoding.ASCII.GetBytes(message);
-            foreach (Client user in users)
-            {
-                if (user != sourceUser)
-                {
-                    user.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-                }
-            }
-        }
-        public void SendCommand(String command, Socket clientSocket)
-        {
-            byte[] buffer = Encoding.ASCII.GetBytes(command);
+
             clientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
-        public void ValidateCommand(String command, Socket userSocket)
+        public void SendToAll(string data)
         {
-            if (command == "!exit")
+            byte[] buffer = Encoding.ASCII.GetBytes(data);
+
+            foreach (Socket client in clients)
             {
-                foreach (Client user in users)
-                {
-                    if (user.Socket == userSocket)
-                    {
-                        users.Remove(new Client(userSocket, user.Username));
-                    }
-                }
-                userSocket.Close();
+                client.Send(buffer, 0, buffer.Length, SocketFlags.None);
             }
         }
     }
