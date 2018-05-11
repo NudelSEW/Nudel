@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nudel", "Nudel\Nudel.csproj", "{51020118-FAAE-4867-995C-DA690646E68A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NudelClient", "NudelClient\NudelClient.csproj", "{2201E7D5-0AF2-4223-B7CF-90AD056CC129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NudelBackend", "NudelBackend\NudelBackend.csproj", "{BF798A6A-45DF-46CB-B483-681CABBC4D73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{51020118-FAAE-4867-995C-DA690646E68A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51020118-FAAE-4867-995C-DA690646E68A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51020118-FAAE-4867-995C-DA690646E68A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51020118-FAAE-4867-995C-DA690646E68A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2201E7D5-0AF2-4223-B7CF-90AD056CC129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2201E7D5-0AF2-4223-B7CF-90AD056CC129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2201E7D5-0AF2-4223-B7CF-90AD056CC129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2201E7D5-0AF2-4223-B7CF-90AD056CC129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF798A6A-45DF-46CB-B483-681CABBC4D73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF798A6A-45DF-46CB-B483-681CABBC4D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF798A6A-45DF-46CB-B483-681CABBC4D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF798A6A-45DF-46CB-B483-681CABBC4D73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
