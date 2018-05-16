@@ -62,12 +62,11 @@
   <ItemGroup>
     <Compile Include="BusinessObjects\Event.cs" />
     <Compile Include="BusinessObjects\User.cs" />
-    <Compile Include="Networking\Client.cs" />
     <Compile Include="Networking\Exceptions\UserNotFoundException.cs" />
     <Compile Include="NudelService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\TcpServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

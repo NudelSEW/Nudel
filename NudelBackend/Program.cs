@@ -1,5 +1,4 @@
-﻿using Nudel.Backend.Networking;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,13 +6,15 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+using TcpServer = JustConnect.Tcp.Server;
+
 namespace Nudel.Backend
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Server server = new Server(8000);
+            TcpServer server = new TcpServer(8000);
             NudelService nudel = new NudelService();
 
             server.Log += (string data) =>
@@ -28,6 +29,7 @@ namespace Nudel.Backend
             {
                 Console.WriteLine($"{((IPEndPoint)clientSocket.RemoteEndPoint).Address} sent:");
                 Console.WriteLine(data);
+
             };
 
             server.Start();
