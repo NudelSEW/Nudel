@@ -18,18 +18,21 @@ namespace Nudel.Backend
 
             server.Log += (string data) =>
             {
-                Console.WriteLine("Server: " + data);
+                Console.WriteLine($"Log: {data}");
+            };
             server.Accepted += (Socket clientSocket) =>
             {
                 Console.WriteLine($"Client accepted: {((IPEndPoint)clientSocket.RemoteEndPoint).Address}");
             };
             server.Received += (string data, Socket clientSocket) =>
             {
-                Console.WriteLine(((IPEndPoint)clientSocket.RemoteEndPoint).Address + " sent:");
+                Console.WriteLine($"{((IPEndPoint)clientSocket.RemoteEndPoint).Address} sent:");
                 Console.WriteLine(data);
             };
 
             server.Start();
+
+            Console.ReadLine();
         }
     }
 }
