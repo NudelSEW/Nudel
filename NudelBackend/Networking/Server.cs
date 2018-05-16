@@ -32,7 +32,7 @@ namespace Nudel.Backend.Networking
         {
             this.port = port;
 
-            clients = new List<Client>();
+            clients = new List<Socket>();
         }
 
         public void Start()
