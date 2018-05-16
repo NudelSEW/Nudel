@@ -82,6 +82,8 @@ namespace Nudel.Backend.Networking
                 return;
             }
 
+            Accepted?.Invoke(clientSocket);
+
             socket.BeginAccept(Accept, null);
 
             clientSocket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, clientSocket);
