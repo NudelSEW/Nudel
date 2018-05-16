@@ -16,17 +16,16 @@ namespace Nudel.Backend.Networking
     {
         private const int BACKLOG = 10;
         private const int BUFFER_SIZE = 2048;
+        private Socket socket;
+        private List<Socket> clients;
+        private int port;
+        private byte[] buffer = new byte[BUFFER_SIZE];
 
         public bool IsRunning { get; set; }
 
         public event LogHandler Log;
         public event ReceivedHandler Received;
         public event AcceptedHandler Accepted;
-
-        private Socket socket;
-        private List<Socket> clients;
-        private int port;
-        private byte[] buffer = new byte[BUFFER_SIZE];
 
         public Server() : this(3131) { }
         public Server(int port)
