@@ -30,6 +30,7 @@ namespace Nudel.Backend
                 Console.WriteLine($"{((IPEndPoint)clientSocket.RemoteEndPoint).Address} sent:");
                 Console.WriteLine(data);
 
+                server.Send(data, clientSocket);
             };
 
             server.Start();
