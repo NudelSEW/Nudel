@@ -18,10 +18,10 @@ namespace Nudel.Backend.Networking
         private const int BUFFER_SIZE = 2048;
         private Socket socket;
         private List<Socket> clients;
-        private int port;
         private byte[] buffer = new byte[BUFFER_SIZE];
 
         public bool IsRunning { get; set; }
+        public int Port { get; set; }
 
         public event LogHandler Log;
         public event ReceivedHandler Received;
@@ -30,7 +30,7 @@ namespace Nudel.Backend.Networking
         public Server() : this(3131) { }
         public Server(int port)
         {
-            this.port = port;
+            Port = port;
 
             clients = new List<Socket>();
         }
@@ -41,7 +41,7 @@ namespace Nudel.Backend.Networking
             {
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-                socket.Bind(new IPEndPoint(IPAddress.Any, port));
+                socket.Bind(new IPEndPoint(IPAddress.Any, Port));
                 socket.Listen(BACKLOG);
                 socket.BeginAccept(Accept, null);
 
