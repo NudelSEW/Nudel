@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Nudel.Networking.Requests;
 using System;
 using System.Net;
 using System.Windows;
@@ -16,12 +18,8 @@ namespace Nudel.Client
         {
             InitializeComponent();
 
-            TcpClient client = new TcpClient(8000);
+            TcpClient client = new TcpClient(8181);
 
-            client.Log += (string data) =>
-            {
-                Console.WriteLine($"Log: {data}");
-            };
             client.Received += (string data) =>
             {
                 Console.WriteLine("Received:");
@@ -30,12 +28,15 @@ namespace Nudel.Client
 
             client.Connect(IPAddress.Loopback);
 
-            JObject json = JObject.Parse(@"{
-                type: 'test',
-                message: 'hello world'
-            }");
+            AuthenticationRequest request = new AuthenticationRequest
+            {
+                UsernameOrEmail = "test",
+                Password = "test",
+            };
 
-            client.Send(json.ToString());
+            JsonSerializerSettings jsonSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+
+            client.Send(JsonConvert.SerializeObject(request, jsonSettings));
         }
     }
 }
