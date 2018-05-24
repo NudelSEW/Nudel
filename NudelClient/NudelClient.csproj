@@ -52,8 +52,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JustConnect">
-      <HintPath>..\..\..\..\..\Coding\C#\JustConnect\JustConnect\bin\Release\JustConnect.dll</HintPath>
+    <Reference Include="JustConnect, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JustConnect.1.1.0\lib\netstandard2.0\JustConnect.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
@@ -181,6 +181,16 @@
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NudelBusinessObjects\NudelBusinessObjects.csproj">
+      <Project>{0d30976c-20cd-4555-8b03-c117a97b79d1}</Project>
+      <Name>NudelBusinessObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NudelNetworking\NudelNetworking.csproj">
+      <Project>{0df5a56b-3e63-4ff7-8408-0fad86170a0b}</Project>
+      <Name>NudelNetworking</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

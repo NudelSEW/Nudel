@@ -47,14 +47,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JustConnect">
-      <HintPath>..\..\..\..\..\Coding\C#\JustConnect\JustConnect\bin\Release\JustConnect.dll</HintPath>
+    <Reference Include="JustConnect, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JustConnect.1.1.0\lib\netstandard2.0\JustConnect.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,8 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessObjects\Event.cs" />
-    <Compile Include="BusinessObjects\User.cs" />
+    <Compile Include="NetworkListener.cs" />
     <Compile Include="NudelService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +84,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NudelBusinessObjects\NudelBusinessObjects.csproj">
+      <Project>{0d30976c-20cd-4555-8b03-c117a97b79d1}</Project>
+      <Name>NudelBusinessObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NudelNetworking\NudelNetworking.csproj">
+      <Project>{0df5a56b-3e63-4ff7-8408-0fad86170a0b}</Project>
+      <Name>NudelNetworking</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
