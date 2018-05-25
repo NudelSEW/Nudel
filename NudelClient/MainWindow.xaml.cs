@@ -12,7 +12,9 @@ namespace Nudel.Client
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
             NetworkListener.Start();
+        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
