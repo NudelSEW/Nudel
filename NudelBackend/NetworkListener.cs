@@ -56,16 +56,17 @@ namespace Nudel.Backend
             else if (rawRequest is AuthenticationRequest)
             {
                 AuthenticationRequest request = rawRequest as AuthenticationRequest;
+
                 string sessionToken = nudel.Authenticate(request.UsernameOrEmail, request.Password);
 
                 string response = JsonConvert.SerializeObject(new AuthenticationResponse(sessionToken));
-
                 server.Send(response, clientSocket);
             }
             else if (rawRequest is CreateEventRequest)
             {
                 CreateEventRequest request = rawRequest as CreateEventRequest;
                 nudel.CreateEvent(request.Event);
+
             }
         }
     }
