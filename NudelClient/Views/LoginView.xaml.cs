@@ -11,9 +11,29 @@ namespace Nudel.Client.Views
     /// </summary>
     public partial class LoginView : UserControl
     {
+        public MainViewModel MainViewModel { get; set; }
+
         public LoginView()
         {
             InitializeComponent();
+        }
+
+        private void LoginView_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainViewModel = (MainViewModel)Window.GetWindow(this).DataContext;
+        }
+
+        private void Login(object sender, RoutedEventArgs e)
+        {
+            LoginRequest request = new LoginRequest
+            {
+                UsernameOrEmail = usernameOrEmail.Text,
+                Password = password.Password
+            };
+
+            NetworkListener.SendRequest(request);
+
+            MainViewModel.CurrentView = new HomeView();
         }
     }
 }
