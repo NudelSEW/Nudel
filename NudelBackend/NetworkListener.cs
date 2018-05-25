@@ -36,7 +36,7 @@ namespace Nudel.Backend
         }
         private void ProcessRequest(string data, Socket clientSocket)
         {
-            Request rawRequest = JsonConvert.DeserializeObject<Request>(data, jsonSettings);
+            Object rawRequest = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
 
             if (rawRequest is AuthenticationRequest)
             {
