@@ -18,7 +18,27 @@ namespace Nudel.Backend
             db = mongo.GetDatabase("nudel");
         }
 
-        public void Register(string username, string email, string password, string firstName, string lastName) => throw new NotImplementedException();
+        public string Register(string username, string email, string password, string firstName, string lastName)
+        {
+            var collection = db.GetCollection<User>("users");
+
+            long lastID = collection.Find(x => true).SortByDescending(d => d.ID).Limit(1).FirstOrDefault().ID;
+
+            Console.WriteLine($"Last ID: {lastID}");
+
+            collection.InsertOne(new User
+            {
+                ID = lastID,
+                Username = username,
+                Email = email,
+                Password = password,
+                FirstName = firstName,
+                LastName = lastName
+            });
+
+            return "1234";
+        }
+
         public string Authenticate(string usernameOrEmail, string password) => throw new NotImplementedException();
 
         public void CreateEvent(string title, string description, DateTime time, Location location, List<DateTime> options) => throw new NotImplementedException();
