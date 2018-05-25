@@ -3,12 +3,7 @@ using Newtonsoft.Json;
 using Nudel.Networking.Requests;
 using Nudel.Networking.Responses;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nudel.Backend
 {
