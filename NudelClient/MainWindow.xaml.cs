@@ -1,11 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Nudel.Networking.Requests;
-using System;
-using System.Net;
+﻿using Nudel.Client.ViewModels;
 using System.Windows;
-
-using TcpClient = JustConnect.Tcp.Client;
+using System.Windows.Controls;
 
 namespace Nudel.Client
 {
