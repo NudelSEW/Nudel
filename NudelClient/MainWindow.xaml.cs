@@ -28,10 +28,13 @@ namespace Nudel.Client
 
             client.Connect(IPAddress.Loopback);
 
-            AuthenticationRequest request = new AuthenticationRequest
+            RegisterRequest request = new RegisterRequest
             {
-                UsernameOrEmail = "test",
-                Password = "test",
+                Username = "chrispypb",
+                Email = "christoph.paderbarosch@gmail.com",
+                Password = "hallo123",
+                FirstName = "Christoph",
+                LastName = "Pader-Barosch"
             };
 
             JsonSerializerSettings jsonSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
