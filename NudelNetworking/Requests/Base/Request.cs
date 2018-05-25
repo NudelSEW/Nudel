@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Nudel.Networking.Requests.Base
 {
-    public class NonAuthenticatedRequest : Request
+    public class Request
     {
-        public NonAuthenticatedRequest() : base() { }
+        public Request() { }
     }
 }

@@ -14,8 +14,9 @@
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
-    
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Closing="Window_Closing">
+
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -25,8 +26,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <views:LoginView Grid.Row="0" Grid.Column="0" />
-
-        <views:RegisterView Grid.Row="0" Grid.Column="1" />
+        <ContentPresenter Content="{Binding Path=CurrentView}"/>
     </Grid>
 </Window>

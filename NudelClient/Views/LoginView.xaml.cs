@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nudel.Client.ViewModels;
+using Nudel.Networking.Requests;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Nudel.Client.Views
 {
@@ -20,9 +11,29 @@ namespace Nudel.Client.Views
     /// </summary>
     public partial class LoginView : UserControl
     {
+        public MainViewModel MainViewModel { get; set; }
+
         public LoginView()
         {
             InitializeComponent();
+        }
+
+        private void LoginView_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainViewModel = (MainViewModel)Window.GetWindow(this).DataContext;
+        }
+
+        private void Login(object sender, RoutedEventArgs e)
+        {
+            LoginRequest request = new LoginRequest
+            {
+                UsernameOrEmail = usernameOrEmail.Text,
+                Password = password.Password
+            };
+
+            NetworkListener.SendRequest(request);
+
+            MainViewModel.CurrentView = new HomeView();
         }
     }
 }
