@@ -38,7 +38,22 @@ namespace Nudel.Backend
         {
             Object rawRequest = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
 
-            if (rawRequest is AuthenticationRequest)
+            if (rawRequest is RegisterRequest)
+            {
+                RegisterRequest request = rawRequest as RegisterRequest;
+
+                string sessionToken = nudel.Register(
+                    request.Username,
+                    request.Email,
+                    request.Password,
+                    request.FirstName,
+                    request.LastName
+                );
+
+                string response = JsonConvert.SerializeObject(new AuthenticationResponse(sessionToken));
+                server.Send(response, clientSocket);
+            }
+            else if (rawRequest is AuthenticationRequest)
             {
                 AuthenticationRequest request = rawRequest as AuthenticationRequest;
                 string sessionToken = nudel.Authenticate(request.UsernameOrEmail, request.Password);
