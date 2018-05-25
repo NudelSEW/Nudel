@@ -17,7 +17,7 @@ namespace Nudel.Backend
         private const int PORT = 8181;
         private Server server;
         private NudelService nudel;
-        private JsonSerializerSettings jsonSettings;
+        private readonly JsonSerializerSettings jsonSettings;
 
         public NetworkListener()
         {
