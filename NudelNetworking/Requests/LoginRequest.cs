@@ -2,13 +2,13 @@
 
 namespace Nudel.Networking.Requests
 {
-    public class AuthenticationRequest : NonAuthenticatedRequest
+    public class LoginRequest : NonAuthenticatedRequest
     {
         public string UsernameOrEmail { get; set; }
         public string Password { get; set; }
 
-        public AuthenticationRequest() : base() { }
-        public AuthenticationRequest(string usernameOrEmail, string password) : base()
+        public LoginRequest() : base() { }
+        public LoginRequest(string usernameOrEmail, string password) : base()
         {
             UsernameOrEmail = usernameOrEmail;
             Password = password;
