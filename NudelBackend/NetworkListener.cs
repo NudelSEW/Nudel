@@ -65,8 +65,14 @@ namespace Nudel.Backend
             else if (rawRequest is CreateEventRequest)
             {
                 CreateEventRequest request = rawRequest as CreateEventRequest;
-                nudel.CreateEvent(request.Event);
 
+                nudel.CreateEvent(
+                    request.Title,
+                    request.Description,
+                    request.Time,
+                    request.Location,
+                    request.Options
+                );
             }
         }
     }
