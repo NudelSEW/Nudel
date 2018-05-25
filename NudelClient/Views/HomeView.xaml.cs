@@ -18,9 +18,9 @@ namespace Nudel.Client.Views
     /// <summary>
     /// Interaction logic for StartView.xaml
     /// </summary>
-    public partial class StartView : UserControl
+    public partial class HomeView : UserControl
     {
-        public StartView()
+        public HomeView()
         {
             InitializeComponent();
         }
