@@ -5,6 +5,7 @@ namespace Nudel.BusinessObjects
 {
     public class Event
     {
+        public long ID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Time { get; set; }
@@ -15,6 +16,7 @@ namespace Nudel.BusinessObjects
 
         public Event() { }
         public Event(
+            long id,
             string title,
             string description,
             DateTime time,
@@ -24,6 +26,7 @@ namespace Nudel.BusinessObjects
             List<DateTime> options
         )
         {
+            ID = id;
             Title = title;
             Description = description;
             Time = time;
