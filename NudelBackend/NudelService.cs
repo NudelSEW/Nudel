@@ -1,4 +1,5 @@
-﻿using Nudel.BusinessObjects;
+﻿using MongoDB.Driver;
+using Nudel.BusinessObjects;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,16 @@ namespace Nudel.Backend
 {
     public class NudelService
     {
-        public NudelService() => throw new NotImplementedException();
+        private MongoClient mongo;
+        private IMongoDatabase db;
+
+        public NudelService()
+        {
+            mongo = new MongoClient(new MongoClientSettings {
+                Server = new MongoServerAddress("localhost", 27017)
+            });
+            db = mongo.GetDatabase("nudel");
+        }
 
         public void Register(string username, string email, string password, string firstName, string lastName) => throw new NotImplementedException();
         public string Authenticate(string usernameOrEmail, string password) => throw new NotImplementedException();
