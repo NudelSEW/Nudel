@@ -1,11 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Nudel.Networking.Requests;
-using System;
-using System.Net;
+﻿using Nudel.Client.ViewModels;
 using System.Windows;
-
-using TcpClient = JustConnect.Tcp.Client;
+using System.Windows.Controls;
 
 namespace Nudel.Client
 {
@@ -17,29 +12,13 @@ namespace Nudel.Client
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
+            NetworkListener.Start();
+        }
 
-            TcpClient client = new TcpClient(8181);
-
-            client.Received += (string data) =>
-            {
-                Console.WriteLine("Received:");
-                Console.WriteLine(data);
-            };
-
-            client.Connect(IPAddress.Loopback);
-
-            RegisterRequest request = new RegisterRequest
-            {
-                Username = "chrispypb",
-                Email = "christoph.paderbarosch@gmail.com",
-                Password = "hallo123",
-                FirstName = "Christoph",
-                LastName = "Pader-Barosch"
-            };
-
-            JsonSerializerSettings jsonSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-
-            client.Send(JsonConvert.SerializeObject(request, jsonSettings));
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            NetworkListener.Stop();
         }
     }
 }

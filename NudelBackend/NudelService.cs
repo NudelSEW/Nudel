@@ -39,21 +39,26 @@ namespace Nudel.Backend
             return "1234";
         }
 
-        public string Authenticate(string usernameOrEmail, string password) => throw new NotImplementedException();
+        public string Login(string usernameOrEmail, string password) => throw new NotImplementedException();
 
         public void CreateEvent(string title, string description, DateTime time, Location location, List<DateTime> options) => throw new NotImplementedException();
 
         public Event FindEvent(long id) => throw new NotImplementedException();
+
         public List<Event> FindEvents(string title) => throw new NotImplementedException();
 
         public void SubscribeEvent(Event @event) => throw new NotImplementedException();
+
         public void SubscribeEvent(long id) => throw new NotImplementedException();
+
         public void SubscribeEvent(string title) => throw new NotImplementedException();
 
         public User FindUser(long id) => throw new NotImplementedException();
+
         public User FindUser(string usernameOrEmail) => throw new NotImplementedException();
 
         public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
+
         public void NotifyUsers(Event @event, List<User> user) => throw new NotImplementedException();
     }
 }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Nudel.Networking.Requests;
 using Nudel.Networking.Responses;
+using Nudel.Networking.Responses.Base;
 using System;
 using System.Net.Sockets;
 
@@ -30,13 +31,23 @@ namespace Nudel.Backend
         {
             server.Start();
         }
+
         public void Stop()
         {
             server.Stop();
         }
+
+        public void SendResponse(Response response, Socket clientSocket)
+        {
+            string responseString = JsonConvert.SerializeObject(response);
+            server.Send(responseString, clientSocket);
+        }
+
         private void ProcessRequest(string data, Socket clientSocket)
         {
             Object rawRequest = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
+
+            Console.WriteLine($"Received Request of Type: {rawRequest.GetType()}");
 
             if (rawRequest is RegisterRequest)
             {
@@ -50,17 +61,15 @@ namespace Nudel.Backend
                     request.LastName
                 );
 
-                string response = JsonConvert.SerializeObject(new AuthenticationResponse(sessionToken));
-                server.Send(response, clientSocket);
+                SendResponse(new LoginResponse(sessionToken), clientSocket);
             }
-            else if (rawRequest is AuthenticationRequest)
+            else if (rawRequest is LoginRequest)
             {
-                AuthenticationRequest request = rawRequest as AuthenticationRequest;
+                LoginRequest request = rawRequest as LoginRequest;
 
-                string sessionToken = nudel.Authenticate(request.UsernameOrEmail, request.Password);
+                string sessionToken = nudel.Login(request.UsernameOrEmail, request.Password);
 
-                string response = JsonConvert.SerializeObject(new AuthenticationResponse(sessionToken));
-                server.Send(response, clientSocket);
+                SendResponse(new LoginResponse(sessionToken), clientSocket);
             }
             else if (rawRequest is CreateEventRequest)
             {
