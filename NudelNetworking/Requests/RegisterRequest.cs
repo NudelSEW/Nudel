@@ -15,6 +15,7 @@ namespace Nudel.Networking.Requests
 
         public RegisterRequest(string username, string email, string password, string firstName, string lastName) : base()
         {
+
             Username = username;
             Email = email;
             Password = password;
