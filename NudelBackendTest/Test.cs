@@ -1,26 +1,29 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nudel.Backend;
+
 namespace NudelBackendTest
 {
     [TestClass]
-    public class UnitTest1
+    public class Test
     {
-        
+        private NudelService nudel;
+
+        public Test()
+        {
+            nudel = new NudelService();
+        }
+
         [TestMethod]
         public void TestMongoConnection()
         {
             
             
         }
+
         [TestMethod]
         public void TestRegister()
         {
-            string password = "JHFdnexT";
-            if (password.Length > 8) {
-                for (int i = 0; i < 8; i++)
-                {
-
-                }
-            }
+            nudel.Register("testuser", "test@test.at", "test123", "testname", "testnname");
         }
     }
 }

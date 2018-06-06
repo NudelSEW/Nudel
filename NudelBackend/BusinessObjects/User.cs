@@ -1,15 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Nudel.Backend.BusinessObjects
 {
     public class User
     {
+        [BsonId]
         public long ID { get; set; }
+        [BsonElement("username")]
         public string Username { get; set; }
+        [BsonElement("email")]
         public string Email { get; set; }
+        [BsonElement("password")]
         public string Password { get; set; }
+        [BsonElement("firstName")]
         public string FirstName { get; set; }
+        [BsonElement("lastName")]
         public string LastName { get; set; }
+        [BsonElement("ownedEvents")]
         public List<Event> OwnedEvents { get; set; }
 
         public User() { }
