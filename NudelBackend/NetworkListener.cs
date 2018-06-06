@@ -53,7 +53,7 @@ namespace Nudel.Backend
         {
             Object rawRequest = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
 
-            Console.WriteLine($"Received Request of Type: {rawRequest.GetType()}");
+            //Console.WriteLine($"Received Request of Type: {rawRequest.GetType()}");
 
             if (rawRequest is RegisterRequest)
             {
