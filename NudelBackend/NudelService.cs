@@ -41,7 +41,21 @@ namespace Nudel.Backend
 
         public string Login(string usernameOrEmail, string password) => throw new NotImplementedException();
 
-        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options) => throw new NotImplementedException();
+        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options)
+        {
+            long id = eventCollection.Count(x => true) + 1;
+
+            eventCollection.InsertOne(new Event
+            {
+                ID = id,
+                Title = title,
+                Description = description,
+                Time = time,
+                Location = location,
+                Options = options
+            });
+        }
+
 
         public Event FindEvent(long id) => throw new NotImplementedException();
 
