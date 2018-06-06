@@ -9,6 +9,8 @@ namespace Nudel.Backend
     {
         private MongoClient mongo;
         private IMongoDatabase db;
+        private IMongoCollection<User> userCollection;
+        private IMongoCollection<Event> eventCollection;
 
         public NudelService()
         {
@@ -16,34 +18,84 @@ namespace Nudel.Backend
                 Server = new MongoServerAddress("localhost", 27017)
             });
             db = mongo.GetDatabase("nudel");
+            userCollection = db.GetCollection<User>("users");
+            eventCollection = db.GetCollection<Event>("events");
         }
 
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
-            var collection = db.GetCollection<User>("users");
+            long id = userCollection.Count(x=>true) + 1;
 
-            long lastID = collection.Find(x => true).SortByDescending(d => d.ID).Limit(1).FirstOrDefault().ID;
+            var results = userCollection.Find(x => x.Username == username || x.Email == email);
 
-            Console.WriteLine($"Last ID: {lastID}");
-
-            collection.InsertOne(new User
+            if (results.Count() == 0)
+                userCollection.InsertOne(new User
+                {
+                    ID = id,
+                    Username = username,
+                    Email = email,
+                    Password = password,
+                    FirstName = firstName,
+                    LastName = lastName
+                });
+            else
             {
-                ID = lastID,
-                Username = username,
-                Email = email,
-                Password = password,
-                FirstName = firstName,
-                LastName = lastName
-            });
-
+                return "error";
+            }
             return "1234";
         }
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-        public string Login(string usernameOrEmail, string password) => throw new NotImplementedException();
+        public string Login(string usernameOrEmail, string password)
+        {
+            var collection = db.GetCollection<User>("users");
+            var results = collection.Find(x => x.Username == usernameOrEmail && x.Password == password || x.Email == usernameOrEmail && x.Password == password);
+            if (results.Count() > 0)
+            {
+                Console.WriteLine("you are logged in");
+            }
+            else
+                Console.WriteLine("You are a FAILURE");
 
-        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options) => throw new NotImplementedException();
+                return "123";
+        }
 
-        public Event FindEvent(long id) => throw new NotImplementedException();
+        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options)
+        {
+            long id = eventCollection.Count(x => true) + 1;
+
+            eventCollection.InsertOne(new Event
+            {
+                ID = id,
+                Title = title,
+                Description = description,
+                Time = time,
+                Location = location,
+                Options = options
+            });
+        }
+
+        public Event FindEvent(long id)
+        {
+            var result = eventCollection.Find(x => x.ID == id);
+
+            if (result.Count() != 1)
+            {
+                return null;
+            }
+            return result.First();
+        }
 
         public List<Event> FindEvents(string title) => throw new NotImplementedException();
 

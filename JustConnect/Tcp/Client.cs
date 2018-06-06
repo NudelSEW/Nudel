@@ -47,7 +47,7 @@ namespace JustConnect.Tcp
         }
         public void Disconnect()
         {
-            //socket.Disconnect(false);
+            socket.Disconnect(false);
             socket.Close();
 
             IsConnected = false;
@@ -57,11 +57,10 @@ namespace JustConnect.Tcp
         private void Receive(IAsyncResult AR)
         {
             Socket serverSocket = (Socket)AR.AsyncState;
-            int received;
 
             try
             {
-                received = serverSocket.EndReceive(AR);
+                int received = serverSocket.EndReceive(AR);
 
                 byte[] recBuf = new byte[received];
                 Array.Copy(buffer, recBuf, received);
@@ -71,9 +70,10 @@ namespace JustConnect.Tcp
 
                 socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, socket);
             }
-            catch (SocketException)
+            catch (Exception)
             {
-                serverSocket.Close();
+                socket = null;
+                IsConnected = false;
 
                 Log?.Invoke("Client disconnected");
 
