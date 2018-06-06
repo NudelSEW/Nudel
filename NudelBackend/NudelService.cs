@@ -26,8 +26,8 @@ namespace Nudel.Backend
             long id = collection.Count(x=>true)+1;
             //Console.WriteLine($"Last ID: {lastID}");
             var results = collection.Find(x => x.Username == username || x.Email == email);
-         
-            if(results.Count() == 0)
+
+            if (results.Count() == 0)
                 collection.InsertOne(new User
                 {
                     ID = id,
@@ -37,6 +37,8 @@ namespace Nudel.Backend
                     FirstName = firstName,
                     LastName = lastName
                 });
+            else
+                return "Error";
 
             return "1234";
         }
