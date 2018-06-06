@@ -1,4 +1,4 @@
-﻿namespace Nudel.BusinessObjects
+﻿namespace Nudel.Backend.BusinessObjects
 {
     public struct Location
     {

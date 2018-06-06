@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using Nudel.BusinessObjects;
+using Nudel.Backend.BusinessObjects;
 using System;
 using System.Collections.Generic;
 
@@ -41,7 +41,7 @@ namespace Nudel.Backend
 
         public string Login(string usernameOrEmail, string password) => throw new NotImplementedException();
 
-        public void CreateEvent(string title, string description, DateTime time, Location location, List<DateTime> options) => throw new NotImplementedException();
+        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options) => throw new NotImplementedException();
 
         public Event FindEvent(long id) => throw new NotImplementedException();
 

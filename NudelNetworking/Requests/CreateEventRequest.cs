@@ -1,5 +1,4 @@
-﻿using Nudel.BusinessObjects;
-using Nudel.Networking.Requests.Base;
+﻿using Nudel.Networking.Requests.Base;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +9,7 @@ namespace Nudel.Networking.Requests
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Time { get; set; }
-        public Location Location { get; set; }
+        public Tuple<double, double> Location { get; set; }
         public List<DateTime> Options { get; set; }
 
         public CreateEventRequest() { }
@@ -20,7 +19,7 @@ namespace Nudel.Networking.Requests
             string title,
             string description,
             DateTime time,
-            Location location,
+            Tuple<double, double> location,
             List<DateTime> options
         ) : base(sessionToken)
         {

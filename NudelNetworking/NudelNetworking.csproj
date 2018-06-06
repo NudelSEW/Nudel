@@ -5,8 +5,4 @@
     <RootNamespace>Nudel.Networking</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\NudelBusinessObjects\NudelBusinessObjects.csproj" />
-  </ItemGroup>
-
 </Project>

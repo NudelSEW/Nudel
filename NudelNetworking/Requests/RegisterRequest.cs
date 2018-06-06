@@ -1,5 +1,4 @@
-﻿using Nudel.BusinessObjects;
-using Nudel.Networking.Requests.Base;
+﻿using Nudel.Networking.Requests.Base;
 
 namespace Nudel.Networking.Requests
 {

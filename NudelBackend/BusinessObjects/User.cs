@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nudel.BusinessObjects
+namespace Nudel.Backend.BusinessObjects
 {
     public class User
     {
