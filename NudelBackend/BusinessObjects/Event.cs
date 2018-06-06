@@ -20,7 +20,7 @@ namespace Nudel.Backend.BusinessObjects
             string title,
             string description,
             DateTime time,
-            Location location,
+            Tuple<double, double> location,
             User owner,
             List<User> members,
             List<DateTime> options
