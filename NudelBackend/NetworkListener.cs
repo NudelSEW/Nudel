@@ -24,6 +24,7 @@ namespace Nudel.Backend
                 TypeNameHandling = TypeNameHandling.All
             };
 
+            server.Log += Log;
             server.Received += ProcessRequest;
         }
 
@@ -35,6 +36,11 @@ namespace Nudel.Backend
         public void Stop()
         {
             server.Stop();
+        }
+
+        public void Log(string data)
+        {
+            Console.WriteLine(data);
         }
 
         public void SendResponse(Response response, Socket clientSocket)
