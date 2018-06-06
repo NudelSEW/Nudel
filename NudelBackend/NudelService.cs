@@ -26,24 +26,51 @@ namespace Nudel.Backend
             long id = collection.Count(x=>true)+1;
             //Console.WriteLine($"Last ID: {lastID}");
             var results = collection.Find(x => x.Username == username || x.Email == email);
-
-            if (results.Count() == 0)
-                collection.InsertOne(new User
-                {
-                    ID = id,
-                    Username = username,
-                    Email = email,
-                    Password = password,
-                    FirstName = firstName,
-                    LastName = lastName
-                });
+            if (IsValidEmail(email) == true)
+            {
+                if (results.Count() == 0)
+                    collection.InsertOne(new User
+                    {
+                        ID = id,
+                        Username = username,
+                        Email = email,
+                        Password = password,
+                        FirstName = firstName,
+                        LastName = lastName
+                    });
+                else
+                    return "Error";
+            }
             else
-                return "Error";
-
+                throw new NotImplementedException();
             return "1234";
         }
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-        public string Login(string usernameOrEmail, string password) => throw new NotImplementedException();
+        public string Login(string usernameOrEmail, string password)
+        {
+            var collection = db.GetCollection<User>("users");
+            var results = collection.Find(x => x.Username == usernameOrEmail && x.Password == password || x.Email == usernameOrEmail && x.Password == password);
+            if (results.Count() > 0)
+            {
+                Console.WriteLine("you are logged in");
+            }
+            else
+                Console.WriteLine("You are a FAILURE");
+
+                return "123";
+        }
 
         public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options) => throw new NotImplementedException();
 
