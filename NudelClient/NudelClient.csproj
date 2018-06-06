@@ -184,9 +184,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\NudelBusinessObjects\NudelBusinessObjects.csproj">
-      <Project>{0d30976c-20cd-4555-8b03-c117a97b79d1}</Project>
-      <Name>NudelBusinessObjects</Name>
+    <ProjectReference Include="..\..\..\..\..\Coding\JustConnect\JustConnect\JustConnect.csproj">
+      <Project>{531e98cc-5503-4e1f-9716-5e56a139fd41}</Project>
+      <Name>JustConnect</Name>
     </ProjectReference>
     <ProjectReference Include="..\NudelNetworking\NudelNetworking.csproj">
       <Project>{0df5a56b-3e63-4ff7-8408-0fad86170a0b}</Project>
