@@ -22,13 +22,13 @@ namespace Nudel.Backend
         {
             var collection = db.GetCollection<User>("users");
 
-            long lastID = collection.Find(x => true).SortByDescending(d => d.ID).Limit(1).FirstOrDefault().ID;
-
-            Console.WriteLine($"Last ID: {lastID}");
+            //long lastID = collection.Find(x => true).SortByDescending(d => d.ID).Limit(1).FirstOrDefault().ID;
+            long id = collection.Count(x=>true)+1;
+            //Console.WriteLine($"Last ID: {lastID}");
 
             collection.InsertOne(new User
             {
-                ID = lastID,
+                ID = id,
                 Username = username,
                 Email = email,
                 Password = password,

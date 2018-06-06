@@ -4,11 +4,11 @@ using Nudel.Backend;
 namespace NudelBackendTest
 {
     [TestClass]
-    public class UnitTest1
+    public class Test
     {
         private NudelService nudel;
 
-        public UnitTest1()
+        public Test()
         {
             nudel = new NudelService();
         }
@@ -16,8 +16,8 @@ namespace NudelBackendTest
         [TestMethod]
         public void TestMongoConnection()
         {
-
-
+            
+            
         }
 
         [TestMethod]
