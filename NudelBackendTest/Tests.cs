@@ -4,11 +4,11 @@ using Nudel.Backend;
 namespace NudelBackendTest
 {
     [TestClass]
-    public class UnitTest1
+    public class Tests
     {
         private NudelService nudel;
 
-        public UnitTest1()
+        public Tests()
         {
             nudel = new NudelService();
         }
