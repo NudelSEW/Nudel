@@ -13,6 +13,16 @@ namespace Nudel.Client
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+
+#if DEBUG
+            NetworkListener.Log += (string data) =>
+            {
+                log.AppendText(data);
+            };
+#else
+            logSection.Visibility = Visibility.Collapsed;
+#endif
+
             NetworkListener.Start();
         }
 

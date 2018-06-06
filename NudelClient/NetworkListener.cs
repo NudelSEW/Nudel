@@ -13,6 +13,10 @@ namespace Nudel.Client
         private static TcpClient client;
         private static readonly JsonSerializerSettings jsonSettings;
 
+#if DEBUG
+        public static event ClientLogHandler Log;
+#endif
+
         static NetworkListener()
         {
             client = new TcpClient(PORT);
@@ -22,6 +26,10 @@ namespace Nudel.Client
                 TypeNameHandling = TypeNameHandling.All
             };
 
+#if DEBUG
+            client.Log += Log;
+#endif
+            
             client.Received += ProcessResponse;
         }
 
