@@ -42,6 +42,7 @@ namespace Nudel.Backend
             {
                 return "error";
             }
+            return "1234";
         }
         public bool IsValidEmail(string email)
         {
