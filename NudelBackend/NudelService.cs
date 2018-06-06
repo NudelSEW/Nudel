@@ -25,16 +25,18 @@ namespace Nudel.Backend
             //long lastID = collection.Find(x => true).SortByDescending(d => d.ID).Limit(1).FirstOrDefault().ID;
             long id = collection.Count(x=>true)+1;
             //Console.WriteLine($"Last ID: {lastID}");
-
-            collection.InsertOne(new User
-            {
-                ID = id,
-                Username = username,
-                Email = email,
-                Password = password,
-                FirstName = firstName,
-                LastName = lastName
-            });
+            var results = collection.Find(x => x.Username == username || x.Email == email);
+         
+            if(results.Count() == 0)
+                collection.InsertOne(new User
+                {
+                    ID = id,
+                    Username = username,
+                    Email = email,
+                    Password = password,
+                    FirstName = firstName,
+                    LastName = lastName
+                });
 
             return "1234";
         }
