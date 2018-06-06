@@ -9,6 +9,8 @@ namespace Nudel.Backend
     {
         private MongoClient mongo;
         private IMongoDatabase db;
+        private IMongoCollection<User> userCollection;
+        private IMongoCollection<Event> eventCollection;
 
         public NudelService()
         {
@@ -16,17 +18,15 @@ namespace Nudel.Backend
                 Server = new MongoServerAddress("localhost", 27017)
             });
             db = mongo.GetDatabase("nudel");
+            userCollection = db.GetCollection<User>("users");
+            eventCollection = db.GetCollection<Event>("events");
         }
 
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
-            var collection = db.GetCollection<User>("users");
+            long id = userCollection.Count(x=>true) + 1;
 
-            //long lastID = collection.Find(x => true).SortByDescending(d => d.ID).Limit(1).FirstOrDefault().ID;
-            long id = collection.Count(x=>true)+1;
-            //Console.WriteLine($"Last ID: {lastID}");
-
-            collection.InsertOne(new User
+            userCollection.InsertOne(new User
             {
                 ID = id,
                 Username = username,
