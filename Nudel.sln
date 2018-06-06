@@ -19,11 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{C0DE9441-F14B-4620-8E94-B8605EAC4962}"
 EndProject
-<<<<<<< HEAD
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustConnect", "JustConnect\JustConnect.csproj", "{39456E4F-F136-4682-B7BA-5096438B7EA3}"
-=======
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustConnect", "JustConnect\JustConnect.csproj", "{E5380DCD-CA8D-4AB4-8CC2-68B6450C560D}"
->>>>>>> Feli
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,17 +47,10 @@ Global
 		{9B842711-2CAF-40A4-B7A0-B5E8B6FEF4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B842711-2CAF-40A4-B7A0-B5E8B6FEF4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B842711-2CAF-40A4-B7A0-B5E8B6FEF4D4}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD
-		{39456E4F-F136-4682-B7BA-5096438B7EA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39456E4F-F136-4682-B7BA-5096438B7EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39456E4F-F136-4682-B7BA-5096438B7EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39456E4F-F136-4682-B7BA-5096438B7EA3}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
 		{E5380DCD-CA8D-4AB4-8CC2-68B6450C560D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5380DCD-CA8D-4AB4-8CC2-68B6450C560D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5380DCD-CA8D-4AB4-8CC2-68B6450C560D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5380DCD-CA8D-4AB4-8CC2-68B6450C560D}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> Feli
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,11 +61,7 @@ Global
 		{0DF5A56B-3E63-4FF7-8408-0FAD86170A0B} = {C221C14B-8481-4D1C-952B-110D05C10F8E}
 		{1D9DAD81-1F9D-4E1E-9F84-397EBCD0E584} = {07813DB6-74D0-48C1-97FA-DCDC38B6DF0C}
 		{9B842711-2CAF-40A4-B7A0-B5E8B6FEF4D4} = {07813DB6-74D0-48C1-97FA-DCDC38B6DF0C}
-<<<<<<< HEAD
-		{39456E4F-F136-4682-B7BA-5096438B7EA3} = {C221C14B-8481-4D1C-952B-110D05C10F8E}
-=======
 		{E5380DCD-CA8D-4AB4-8CC2-68B6450C560D} = {C221C14B-8481-4D1C-952B-110D05C10F8E}
->>>>>>> Feli
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {709911E7-6E3C-4282-B0F9-908BBEC81677}
