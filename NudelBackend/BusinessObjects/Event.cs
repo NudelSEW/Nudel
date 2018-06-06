@@ -9,7 +9,7 @@ namespace Nudel.Backend.BusinessObjects
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Time { get; set; }
-        public Location Location { get; set; }
+        public Tuple<double, double> Location { get; set; }
         public User Owner { get; set; }
         public List<User> Members { get; set; }
         public List<DateTime> Options { get; set; }
