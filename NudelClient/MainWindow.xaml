@@ -26,7 +26,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ContentPresenter Grid.Row="0" Content="{Binding Path=CurrentView}"/>
+        <ContentPresenter Grid.Row="0" Content="{Binding Path=CurrentView}" />
 
         <Border Name="logSection" Grid.Row="1" Padding="10" Background="#EEEEEE">
             <StackPanel Orientation="Vertical">
