@@ -81,7 +81,7 @@ namespace JustConnect.Tcp
 
                 clientSocket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, clientSocket);
             }
-            catch (Exception e)
+            catch (ObjectDisposedException)
             {
                 return;
             }
@@ -103,19 +103,10 @@ namespace JustConnect.Tcp
 
                 clientSocket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, clientSocket);
             }
-            catch (Exception e)
+            catch (SocketException)
             {
-                Log(e.ToString());
-
-                // Don't shutdown because the socket may be disposed and its disconnected anyway.
-                foreach (Socket client in clients)
-                {
-                    if (client == clientSocket)
-                    {
-                        Log?.Invoke(((IPEndPoint)client.RemoteEndPoint).Address + " disconnected");
-                        clients.Remove(client);
-                    }
-                }
+                Log?.Invoke(((IPEndPoint)clientSocket.RemoteEndPoint).Address + " disconnected");
+                clients.Remove(clientSocket);
                 clientSocket.Close();
 
                 return;
