@@ -23,7 +23,15 @@ namespace NudelBackendTest
         [TestMethod]
         public void TestRegister()
         {
-            nudel.Register("testuser", "test@test.at", "test123", "testname", "testnname");
+            nudel.Register("testuser", "test@test.at", "test1234", "testname", "testnname");
+            nudel.Register("testuser2", "test2@test.at", "test1234", "testname", "testnname");
+        }
+
+        [TestMethod]
+        public void TestLogin()
+        {
+            nudel.Login("testuser", "test123");
+            nudel.Login("test2@test.at", "test1234");
         }
     }
 }
