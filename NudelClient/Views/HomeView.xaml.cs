@@ -47,5 +47,10 @@ namespace Nudel.Client.Views
             ButtonCloseMenu.Visibility = Visibility.Collapsed;
 
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
