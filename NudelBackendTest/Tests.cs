@@ -1,5 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Driver;
 using Nudel.Backend;
+using Nudel.BusinessObjects;
+using System;
+using System.Collections.Generic;
 
 namespace NudelBackendTest
 {
@@ -8,9 +12,19 @@ namespace NudelBackendTest
     {
         private NudelService nudel;
 
+        private MongoClient mongo;
+        private IMongoDatabase db;
+        private IMongoCollection<User> userCollection;
+        private IMongoCollection<Event> eventCollection;
+
         public Tests()
         {
             nudel = new NudelService();
+
+            mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
+            db = mongo.GetDatabase("nudel");
+            userCollection = db.GetCollection<User>("users");
+            eventCollection = db.GetCollection<Event>("events");
         }
 
         [TestMethod]
