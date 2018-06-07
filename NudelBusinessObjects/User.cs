@@ -24,7 +24,7 @@ namespace Nudel.BusinessObjects
         public string SessionToken { get; set; }
 
         public User() { }
-        public User(long id, string username, string email, string password, string firstName, string lastName, List<Event> ownedEvents)
+        public User(long id, string username, string email, string password, string firstName, string lastName)
         {
             ID = id;
             Username = username;
@@ -32,7 +32,6 @@ namespace Nudel.BusinessObjects
             Password = password;
             FirstName = firstName;
             LastName = lastName;
-            OwnedEvents = ownedEvents;
         }
     }
 }
