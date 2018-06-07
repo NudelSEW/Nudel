@@ -36,19 +36,7 @@ namespace Nudel.Backend
                     FirstName = firstName,
                     LastName = lastName
                 });
-            else
-            {
-                return "error";
-            }
-            return "1234";
-        }
 
-        public bool IsValidEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
             }
             catch
             {
