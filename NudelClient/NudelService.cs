@@ -1,151 +1,263 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using Nudel.Backend.BusinessObjects;
+using Nudel.BusinessObjects;
+using NudelBusinessObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nudel.Backend
 {
+    /// <summary>
+    /// The NudelService class contains all major functionality to interact with the database.
+    /// With it you can create, delete and query for Events and Users.
+    /// </summary>
     public class NudelService
     {
-        private MongoClient mongo;
-        private IMongoDatabase db;
-        private IMongoCollection<User> userCollection;
-        private IMongoCollection<Event> eventCollection;
+        private static MongoClient mongo;
+        private static IMongoDatabase db;
+        private static IMongoCollection<User> userCollection;
+        private static IMongoCollection<Event> eventCollection;
 
-        public NudelService()
+        private User user;
+
+        /// <summary>
+        /// The static NudelService constructor initilizes the database connection.
+        /// </summary>
+        static NudelService()
         {
-            mongo = new MongoClient(new MongoClientSettings {
-                Server = new MongoServerAddress("localhost", 27017)
-            });
+            mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
             db = mongo.GetDatabase("nudel");
             userCollection = db.GetCollection<User>("users");
             eventCollection = db.GetCollection<Event>("events");
         }
 
+        /// <summary>
+        /// The basic NudelService constructor creates the NudelService object.
+        /// </summary>
+        public NudelService() { }
+
+        /// <summary>
+        /// The basic NudelService constructor creates the NudelService object.
+        /// </summary>
+        public NudelService(string sessionToken)
+        {
+            user = ValidateSessionToken(sessionToken);
+            CheckSessionTokenProvided();
+        }
+
+        #region Authentication
+
+        /// <summary>
+        /// Registers a new User and returns a temporary Session Token
+        /// </summary>
+        /// <param name="username">Username of the new User</param>
+        /// <param name="email">Email of the new User</param>
+        /// <param name="password">Password of the new User</param>
+        /// <param name="firstName">First Name of the new User</param>
+        /// <param name="lastName">LastName of the new User</param>
+        /// <returns></returns>
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
-            long id = userCollection.Count(x=>true) + 1;
-
             var results = userCollection.Find(x => x.Username == username || x.Email == email);
 
-            if (results.Count() == 0)
-                userCollection.InsertOne(new User
+            if (results.Count() == 0) {
+                User user = new User
                 {
-                    ID = id,
+                    ID = ObjectId.GenerateNewId(),
                     Username = username,
                     Email = email,
                     Password = password,
                     FirstName = firstName,
                     LastName = lastName
-                });
+                };
+
+                userCollection.InsertOne(user);
+
+                return CreateSessionToken(user);
+            }
             else
             {
-                return "error";
+                return "{error:'passwordInvalid'}";
             }
-
-            return "1234";
-
         }
 
-        public bool IsValidEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-            
-        }
-
+        /// <summary>
+        /// Logs in a already persistent User and returns a temporary Session Token
+        /// </summary>
+        /// <param name="usernameOrEmail">Username or Email of the persistent User</param>
+        /// <param name="password">Password of the persistent User</param>
+        /// <returns></returns>
         public string Login(string usernameOrEmail, string password)
         {
             var collection = db.GetCollection<User>("users");
             var results = collection.Find(x => x.Username == usernameOrEmail && x.Password == password || x.Email == usernameOrEmail && x.Password == password);
+
             if (results.Count() > 0)
             {
-                Console.WriteLine("you are logged in");
+                return CreateSessionToken(results.FirstOrDefault());
             }
-            else
-                Console.WriteLine("You are a FAILURE");
 
-                return "123";
+            return "{error:'passwordInvalid'";
         }
 
-        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options)
+        public void Logout(string sessionToken)
         {
-            long id = eventCollection.Count(x => true) + 1;
-
-            eventCollection.InsertOne(new Event
-            {
-                ID = id,
-                Title = title,
-                Description = description,
-                Time = time,
-                Location = location,
-                Options = options
-            });
+            userCollection.UpdateOne(
+                x => x.SessionToken == sessionToken,
+                Builders<User>.Update.Set(x => x.SessionToken, "")
+            );
         }
 
-        public void DeleteEvent(string title)
+        #endregion
+
+        #region Events
+
+        public void CreateEvent(Event @event)
         {
-            var @event = eventCollection.Find(x => x.Title == title);
-            @event.delete();
-            
+            CheckSessionTokenProvided();
+
+            @event.ID = ObjectId.GenerateNewId();
+            @event.Owner = user;
+
+            eventCollection.InsertOne(@event);
         }
 
-        public Event FindEvent(long id)
+        public void EditEvent(Event newEvent) => throw new NotImplementedException();
+
+        public void DeleteEvent(Event @event) => throw new NotImplementedException();
+
+        public Event FindEvent(ObjectId id)
         {
+            CheckSessionTokenProvided();
+
             var result = eventCollection.Find(x => x.ID == id);
 
             if (result.Count() != 1)
             {
                 return null;
             }
-            return result.First();
+
+            return result.FirstOrDefault();
         }
 
-        public List<Event> FindEvents(string title) => throw new NotImplementedException();
-
-        public void SubscribeEvent(Event @event) => throw new NotImplementedException();
-
-        public void SubscribeEvent(long id) => throw new NotImplementedException();
-
-        public void SubscribeEvent(string title) => throw new NotImplementedException();
-
-        public User FindUser(long id)
+        public List<Event> FindEvents(string title)
         {
-            var collection = db.GetCollection<User>("users");
-            var result = collection.Find(x => x.ID == id);
-            if (result.Count() != 1)
+            CheckSessionTokenProvided();
+
+            var result = eventCollection.Find(x => x.Title == title);
+
+            if (result.Count() == 0)
             {
                 return null;
             }
-            else
+            return result.ToList();
+        }
+
+        public void InviteToEvent(Event @event, User user)
+        {
+            user.Invitations.Add(@event);
+
+            userCollection.ReplaceOne(x => x.ID == user.ID, user);
+        }
+
+        public void AcceptEvent(Event @event)
+        {
+            if (user.Invitations.Any(x => x.ID == @event.ID))
             {
-                return result.First();
+                user.Invitations.Remove(@event);
+                user.JoinedEvents.Add(@event);
+
+                userCollection.ReplaceOne(x => x.ID == user.ID, user);
             }
         }
+
+        public void LeaveEvent(Event @event)
+        {
+            if (user.JoinedEvents.Any(x => x.ID == @event.ID))
+            {
+                user.JoinedEvents.Remove(@event);
+
+                userCollection.ReplaceOne(x => x.ID == user.ID, user);
+            }
+        }
+
+        public void AddComment(Event @event, Comment comment) => throw new NotImplementedException();
+
+        public void DeleteComment(Event @event, Comment comment) => throw new NotImplementedException();
+
+        #endregion
+
+        #region Users
+
+        public User FindUser(ObjectId id)
+        {
+            CheckSessionTokenProvided();
+
+            return userCollection.Find(x => x.ID == id).FirstOrDefault();
+        }
+
         public User FindUser(string usernameOrEmail)
         {
-            var collection = db.GetCollection<User>("users");
-            var result = collection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+            CheckSessionTokenProvided();
+
+            var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+
             if (result.Count() != 1)
             {
                 return null;
             }
-            else
+            return result.FirstOrDefault();
+        }
+
+        public void EditUser(User newUser) => throw new NotImplementedException();
+
+        public void DeleteUser(User user) => throw new NotImplementedException();
+
+        #endregion
+
+        #region Utilities
+
+        private string CreateSessionToken(User user)
+        {
+            string hash = CreateRandomString(64);
+            string sessionToken = $"{user.Username}-{hash}";
+
+            user.SessionToken = sessionToken;
+
+            userCollection.UpdateOne(x => x.ID == user.ID, Builders<User>.Update.Set(x => x.SessionToken, user.SessionToken));
+
+            return sessionToken;
+        }
+
+        private User ValidateSessionToken(string sessionToken)
+        {
+            var result = userCollection.Find(x => x.SessionToken == sessionToken);
+
+            if (result.Count() == 1)
             {
-                return result.First();
+                return result.FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        private void CheckSessionTokenProvided()
+        {
+            if (user == null)
+            {
+                throw new InvalidSessionTokenException("The session token provided is not valid");
             }
         }
 
-        public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
+        private static string CreateRandomString(int length)
+        {
+            Random random = new Random();
 
-        public void NotifyUsers(Event @event, List<User> user) => throw new NotImplementedException();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        #endregion
     }
 }
