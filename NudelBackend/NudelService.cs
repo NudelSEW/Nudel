@@ -37,10 +37,11 @@ namespace Nudel.Backend
                     LastName = lastName
                 });
 
+                return "sessionToken";
             }
-            catch
+            else
             {
-                return false;
+                return "{error:'passwordInvalid'";
             }
         }
 
@@ -50,12 +51,12 @@ namespace Nudel.Backend
             var results = collection.Find(x => x.Username == usernameOrEmail && x.Password == password || x.Email == usernameOrEmail && x.Password == password);
             if (results.Count() > 0)
             {
-                Console.WriteLine("you are logged in");
+                return "sessionToken";
             }
             else
-                Console.WriteLine("You are a FAILURE");
-
-                return "123";
+            {
+                return "{error:'passwordInvalid'";
+            }
         }
 
         public void CreateEvent(string title, string description, DateTime time, Location location, List<DateTime> options)
