@@ -82,7 +82,7 @@ namespace Nudel.Backend
             {
                 return null;
             }
-            return result.First();
+            return result.FirstOrDefault();
         }
 
         public List<Event> FindEvents(string title) => throw new NotImplementedException();
