@@ -2,6 +2,7 @@
 using Nudel.BusinessObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nudel.Backend
 {
@@ -19,7 +20,7 @@ namespace Nudel.Backend
             userCollection = db.GetCollection<User>("users");
             eventCollection = db.GetCollection<Event>("events");
         }
-
+        
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
             long id = userCollection.Count(x => true) + 1;
@@ -27,7 +28,7 @@ namespace Nudel.Backend
             var results = userCollection.Find(x => x.Username == username || x.Email == email);
 
             if (results.Count() == 0) {
-                userCollection.InsertOne(new User
+                User user = new User
                 {
                     ID = id,
                     Username = username,
@@ -35,9 +36,11 @@ namespace Nudel.Backend
                     Password = password,
                     FirstName = firstName,
                     LastName = lastName
-                });
+                };
 
-                return "sessionToken";
+                userCollection.InsertOne(user);
+
+                return CreateSessionToken(user);
             }
             else
             {
