@@ -35,7 +35,7 @@ namespace NudelBackendTest
         }
 
         [TestMethod]
-        public void Should_Register()
+       public void Should_Register()
         {
             nudel.Register("testuser", "test@test.at", "test1234", "testname", "testnname");
             nudel.Register("testuser2", "test2@test.at", "test1234", "testname", "testnname");

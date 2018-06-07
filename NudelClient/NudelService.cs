@@ -91,6 +91,13 @@ namespace Nudel.Backend
             });
         }
 
+        public void DeleteEvent(string title)
+        {
+            var @event = eventCollection.Find(x => x.Title == title);
+            @event.delete();
+            
+        }
+
         public Event FindEvent(long id)
         {
             var result = eventCollection.Find(x => x.ID == id);
