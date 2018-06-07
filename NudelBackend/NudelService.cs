@@ -124,11 +124,7 @@ namespace Nudel.Backend
 
         public void EditEvent(Event newEvent) => throw new NotImplementedException();
 
-        public void EditEvent(long id, Event newEvent) => throw new NotImplementedException();
-
         public void DeleteEvent(Event @event) => throw new NotImplementedException();
-
-        public void DeleteEvent(long id) => throw new NotImplementedException();
 
         public Event FindEvent(ObjectId id)
         {
@@ -159,14 +155,31 @@ namespace Nudel.Backend
 
         public void InviteToEvent(Event @event, User user)
         {
+            user.Invitations.Add(@event);
 
+            userCollection.ReplaceOne(x => x.ID == user.ID, user);
         }
 
-        public void InviteToEvent(long eventId, User user) => throw new NotImplementedException();
+        public void AcceptEvent(Event @event)
+        {
+            if (user.Invitations.Any(x => x.ID == @event.ID))
+            {
+                user.Invitations.Remove(@event);
+                user.JoinedEvents.Add(@event);
 
-        public void InviteToEvent(Event @event, long userId) => throw new NotImplementedException();
+                userCollection.ReplaceOne(x => x.ID == user.ID, user);
+            }
+        }
 
-        public void InviteToEvent(long eventId, long userId) => throw new NotImplementedException();
+        public void LeaveEvent(Event @event)
+        {
+            if (user.JoinedEvents.Any(x => x.ID == @event.ID))
+            {
+                user.JoinedEvents.Remove(@event);
+
+                userCollection.ReplaceOne(x => x.ID == user.ID, user);
+            }
+        }
 
         #endregion
 
@@ -175,13 +188,8 @@ namespace Nudel.Backend
         public User FindUser(ObjectId id)
         {
             CheckSessionTokenProvided();
-            var result = userCollection.Find(x => x.ID == id);
 
-            if (result.Count() != 1)
-            {
-                return null;
-            }
-            return result.FirstOrDefault();
+            return userCollection.Find(x => x.ID == id).FirstOrDefault();
         }
 
         public User FindUser(string usernameOrEmail)
@@ -196,10 +204,6 @@ namespace Nudel.Backend
             }
             return result.FirstOrDefault();
         }
-
-        public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
-
-        public void NotifyUsers(Event @event, List<User> user) => throw new NotImplementedException();
 
         #endregion
 
