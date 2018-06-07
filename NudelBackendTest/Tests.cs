@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Nudel.Backend;
 using Nudel.BusinessObjects;
@@ -10,40 +11,52 @@ namespace NudelBackendTest
     [TestClass]
     public class Tests
     {
-        private NudelService nudel;
         private const string sessionToken = "testToken";
 
-        private static MongoClient mongo;
-        private static IMongoDatabase db;
-        private static IMongoCollection<User> userCollection;
-        private static IMongoCollection<Event> eventCollection;
+        private MongoClient mongo;
+        private IMongoDatabase db;
+        private IMongoCollection<User> userCollection;
+        private IMongoCollection<Event> eventCollection;
 
-        static Tests()
+        public Tests()
         {
             mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
             db = mongo.GetDatabase("nudel");
             userCollection = db.GetCollection<User>("users");
             eventCollection = db.GetCollection<Event>("events");
+
+            User testUser = new User
+            {
+                ID = ObjectId.GenerateNewId(),
+                Username = "TestUser",
+                SessionToken = sessionToken
+            };
+
+            userCollection.InsertOne(testUser);
         }
 
-        [TestMethod]
-        public void Should_Connect_Database()
+        private void DeleteTestUser()
         {
-
+            userCollection.DeleteMany(x => x.SessionToken == "testToken");
         }
 
         [TestMethod]
         public void Should_Register()
         {
-            nudel.Register("testuser", "test@test.at", "test1234", "testname", "testnname");
-            nudel.Register("testuser2", "test2@test.at", "test1234", "testname", "testnname");
+            NudelService nudel = new NudelService();
+
+            DeleteTestUser();
         }
 
         [TestMethod]
         public void Should_Login()
         {
+            NudelService nudel = new NudelService();
+
             nudel.Login("testuser", "test123");
             nudel.Login("test2@test.at", "test1234");
+
+            DeleteTestUser();
         }
 
         [TestMethod]
@@ -53,9 +66,7 @@ namespace NudelBackendTest
             Location location = new Location(46, 16);
 
             // Delete previous Test Objects, if still persistent
-            var deleteResult = eventCollection.DeleteMany(x => x.Title == title && x.Location == location);
-            long deleted = deleteResult.DeletedCount;
-            Console.WriteLine($"Deleted: {deleted}");
+           eventCollection.DeleteMany(x => x.Title == title && x.Location == location);
 
             Event @event = new Event
             {
@@ -81,21 +92,26 @@ namespace NudelBackendTest
             if (results.Count() == 1)
             {
                 Event foundEvent = results.FirstOrDefault();
-                Console.WriteLine($"Result: {foundEvent.ID}");
 
                 // Remove Test Object after test
                 eventCollection.DeleteOne(x => x.ID == foundEvent.ID);
             }
             else
             {
+                DeleteTestUser();
                 Assert.Fail();
             }
+            DeleteTestUser();
         }
 
         [TestMethod]
         public void Should_Find_User()
         {
-            nudel.FindUser(1);
+            NudelService nudel = new NudelService(sessionToken);
+
+            nudel.FindUser(ObjectId.Parse("1"));
+
+            DeleteTestUser();
         }
 
         [TestMethod]
@@ -104,6 +120,8 @@ namespace NudelBackendTest
             NudelService nudel = new NudelService(sessionToken);
 
             nudel.FindEvents("TGM");
+
+            DeleteTestUser();
         }
 
         [TestMethod]
@@ -112,6 +130,8 @@ namespace NudelBackendTest
             NudelService nudel = new NudelService(sessionToken);
 
             nudel.FindUser("");
+
+            DeleteTestUser();
         }
 
     }
