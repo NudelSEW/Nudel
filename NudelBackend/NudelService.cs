@@ -44,7 +44,7 @@ namespace Nudel.Backend
             }
             else
             {
-                return "{error:'passwordInvalid'";
+                return "{error:'passwordInvalid'}";
             }
         }
 
