@@ -31,7 +31,7 @@ namespace NudelBackendTest
         [TestMethod]
         public void Should_Connect_Database()
         {
-            
+                
         }
 
         [TestMethod]
@@ -96,5 +96,16 @@ namespace NudelBackendTest
         {
             nudel.FindUser(sessionToken, 1);
         }
+        [TestMethod]
+        public void Should_Find_Events()
+        {
+            nudel.FindEvents(sessionToken, "TGM");
+        }
+        [TestMethod]
+        public void Should_Find_User_String()
+        {
+            nudel.FindUser("", "");
+        }
+
     }
 }
