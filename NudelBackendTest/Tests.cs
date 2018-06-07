@@ -13,15 +13,13 @@ namespace NudelBackendTest
         private NudelService nudel;
         private const string sessionToken = "testToken";
 
-        private MongoClient mongo;
-        private IMongoDatabase db;
-        private IMongoCollection<User> userCollection;
-        private IMongoCollection<Event> eventCollection;
+        private static MongoClient mongo;
+        private static IMongoDatabase db;
+        private static IMongoCollection<User> userCollection;
+        private static IMongoCollection<Event> eventCollection;
 
-        public Tests()
+        static Tests()
         {
-            nudel = new NudelService();
-
             mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
             db = mongo.GetDatabase("nudel");
             userCollection = db.GetCollection<User>("users");
@@ -31,7 +29,6 @@ namespace NudelBackendTest
         [TestMethod]
         public void Should_Connect_Database()
         {
-                
         }
 
         [TestMethod]
@@ -73,7 +70,10 @@ namespace NudelBackendTest
                 })
             };
 
-            nudel.CreateEvent(sessionToken, @event);
+
+            NudelService nudel = new NudelService(sessionToken);
+
+            nudel.CreateEvent(@event);
 
             var results = eventCollection.Find(x => x.Title == title && x.Location == location);
 
@@ -94,17 +94,23 @@ namespace NudelBackendTest
         [TestMethod]
         public void Should_Find_User()
         {
-            nudel.FindUser(sessionToken, 1);
+            nudel.FindUser(1);
         }
+
         [TestMethod]
         public void Should_Find_Events()
         {
-            nudel.FindEvents(sessionToken, "TGM");
+            NudelService nudel = new NudelService(sessionToken);
+
+            nudel.FindEvents("TGM");
         }
+
         [TestMethod]
         public void Should_Find_User_String()
         {
-            nudel.FindUser("", "");
+            NudelService nudel = new NudelService(sessionToken);
+
+            nudel.FindUser("");
         }
 
     }
