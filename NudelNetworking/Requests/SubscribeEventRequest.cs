@@ -6,24 +6,24 @@ using System.Text;
 
 namespace Nudel.Networking.Requests
 {
-    class SubscribeEventRequest : AuthenticatedRequest
+    class InviteToEventRequest : AuthenticatedRequest
     {
         public long ID { get; set; }
         public string Titel { get; set; }
         public Event Event{ get; set; }
-        public SubscribeEventRequest() : base() { }
+        public InviteToEventRequest() : base() { }
 
-        public SubscribeEventRequest(string sessionToken, long id) : base(sessionToken)
+        public InviteToEventRequest(string sessionToken, long id) : base(sessionToken)
         {
             ID = id;
         }
 
-        public SubscribeEventRequest(string sessionToken, string titel) : base(sessionToken)
+        public InviteToEventRequest(string sessionToken, string titel) : base(sessionToken)
         {
             Titel = titel;
         }
 
-        public SubscribeEventRequest(string sessionToken, Event @event) : base(sessionToken)
+        public InviteToEventRequest(string sessionToken, Event @event) : base(sessionToken)
         {
             Event = @event;
         }
