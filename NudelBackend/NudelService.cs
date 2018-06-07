@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Nudel.Backend
 {
+    /// <summary>
+    /// The NudelService class contains all major functionality to interact with the database. 
+    /// With it you can create, delete and query for Events and Users.
+    /// </summary>
     public class NudelService
     {
         private MongoClient mongo;
@@ -13,6 +17,9 @@ namespace Nudel.Backend
         private IMongoCollection<User> userCollection;
         private IMongoCollection<Event> eventCollection;
 
+        /// <summary>
+        /// The basic NudelService constructor initilizes the database connection and creates the NudelService object.
+        /// </summary>
         public NudelService()
         {
             mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
@@ -20,7 +27,16 @@ namespace Nudel.Backend
             userCollection = db.GetCollection<User>("users");
             eventCollection = db.GetCollection<Event>("events");
         }
-        
+
+        /// <summary>
+        /// Registers a new User and returns a temporary Session Token
+        /// </summary>
+        /// <param name="username">Username of the new User</param>
+        /// <param name="email">Email of the new User</param>
+        /// <param name="password">Password of the new User</param>
+        /// <param name="firstName">First Name of the new User</param>
+        /// <param name="lastName">LastName of the new User</param>
+        /// <returns></returns>
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
             long id = userCollection.Count(x => true) + 1;
@@ -48,6 +64,12 @@ namespace Nudel.Backend
             }
         }
 
+        /// <summary>
+        /// Logs in a already persistent User and returns a temporary Session Token
+        /// </summary>
+        /// <param name="usernameOrEmail">Username or Email of the persistent User</param>
+        /// <param name="password">Password of the persistent User</param>
+        /// <returns></returns>
         public string Login(string usernameOrEmail, string password)
         {
             var collection = db.GetCollection<User>("users");
