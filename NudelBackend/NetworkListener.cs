@@ -1,5 +1,6 @@
 ﻿using JustConnect.Tcp;
 using Newtonsoft.Json;
+using Nudel.BusinessObjects;
 using Nudel.Networking.Requests;
 using Nudel.Networking.Responses;
 using Nudel.Networking.Responses.Base;
@@ -81,13 +82,16 @@ namespace Nudel.Backend
             {
                 CreateEventRequest request = rawRequest as CreateEventRequest;
 
-                nudel.CreateEvent(
-                    request.Title,
-                    request.Description,
-                    request.Time,
-                    request.Location,
-                    request.Options
-                );
+                Event @event = new Event
+                {
+                    Title = request.Title,
+                    Description = request.Description,
+                    Time = request.Time,
+                    Location = request.Location,
+                    Options = request.Options
+                };
+
+                nudel.CreateEvent(request.SessionToken, @event);
             }
         }
     }

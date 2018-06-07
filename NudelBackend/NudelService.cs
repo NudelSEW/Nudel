@@ -59,19 +59,19 @@ namespace Nudel.Backend
             }
         }
 
-        public void CreateEvent(string title, string description, DateTime time, Location location, List<DateTime> options)
+        public void CreateEvent(string sessionToken, Event @event)
         {
             long id = eventCollection.Count(x => true) + 1;
 
-            eventCollection.InsertOne(new Event
+            var result = userCollection.Find(x => x.SessionToken == sessionToken);
+
+            if (result.Count() == 1)
             {
-                ID = id,
-                Title = title,
-                Description = description,
-                Time = time,
-                Location = location,
-                Options = options
-            });
+                User user = result.FirstOrDefault();
+                @event.Owner = user;
+            }
+
+            eventCollection.InsertOne(@event);
         }
 
         public Event FindEvent(long id)
