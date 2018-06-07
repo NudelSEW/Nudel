@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nudel.Client.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,9 @@ namespace Nudel.Client.Views
     /// <summary>
     /// Interaktionslogik für EventCard.xaml
     /// </summary>
-    public partial class EventCard : UserControl
+    public partial class EventCardView : UserControl
     {
-        public EventCard()
+        public EventCardView()
         {
             InitializeComponent();
         }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Nudel.Client.Views.EventCard"
+﻿<UserControl x:Class="Nudel.Client.Views.EventCardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -19,7 +19,16 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <WrapPanel Margin="0 0 8 8">
+
+    <materialDesign:Card Width="200" Padding="20">
+        <StackPanel Orientation="Vertical">
+            <Image Height="50" Stretch="UniformToFill" />
+            <Label Content="{Binding Path=Title}" />
+            <Label Content="{Binding Path=Description}" />
+        </StackPanel>
+    </materialDesign:Card>
+
+    <!--<WrapPanel Margin="0 0 8 8">
         <smtx:XamlDisplay Key="cards_1" Margin="4 4 0 0" VerticalContentAlignment="Top">
             <materialDesign:Card Width="200">
                 <Grid>
@@ -57,5 +66,5 @@
                 </Grid>
             </materialDesign:Card>
         </smtx:XamlDisplay>
-    </WrapPanel>
+    </WrapPanel>-->
 </UserControl>

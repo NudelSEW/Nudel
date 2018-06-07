@@ -88,10 +88,11 @@
     </ApplicationDefinition>
     <Compile Include="NetworkListener.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="ViewModels\EventCardViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\EventCard.xaml.cs">
-      <DependentUpon>EventCard.xaml</DependentUpon>
+    <Compile Include="Views\EventCardView.xaml.cs">
+      <DependentUpon>EventCardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
@@ -123,7 +124,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\EventCard.xaml">
+    <Page Include="Views\EventCardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
