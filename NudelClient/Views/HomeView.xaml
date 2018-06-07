@@ -40,15 +40,21 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <!-- Topbar -->
         <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#FF3F51B5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="139*"/>
+                <ColumnDefinition Width="661*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Text="Nudel Home" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="White"/>
+            <TextBlock Text="Nudel Home" HorizontalAlignment="Left" Margin="70,13,0,12" VerticalAlignment="Center" FontSize="22" Foreground="White" Grid.ColumnSpan="2"/>
+            <TextBox materialDesign:HintAssist.Hint="Suche" FontSize="22" TextChanged="TextBox_TextChanged" Grid.Column="1" Margin="213,-7,309,7" Foreground="White" BorderBrush="#89FFFFFF" Text="Search Projekt"/>
+            <materialDesign:PackIcon Kind="Magnify" Margin="357,10,253,8" Foreground="White" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Grid.Column="1" VerticalAlignment="Stretch" RenderTransformOrigin="0.465,-0.37"/>
             <!-- Right Menu -->
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0,4,0,5">
                 <TextBlock Text="Oliver Vicovac" VerticalAlignment="Center" FontSize="18" Foreground="#FFB8B8B8"></TextBlock>
                 <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Foreground="#FFB8B8B8" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                     <StackPanel Width="150">
@@ -60,7 +66,7 @@
                 </materialDesign:PopupBox>
             </StackPanel>
         </Grid>
-       
+
         <!-- Sidebar -->
         <Grid x:Name="GridMenu" Grid.RowSpan="2" HorizontalAlignment="Left" Width="55" Background="#FF3F51B5">
             <StackPanel>
@@ -84,7 +90,7 @@
                     </ListViewItem>
                     <ListViewItem Height="60" Width="150">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Calendar" Width="30" Height="30" VerticalAlignment="Center" Foreground="#FF001E6E" Margin="3"></materialDesign:PackIcon>
+                            <materialDesign:PackIcon Kind="Calendar" Width="30" Height="30" VerticalAlignment="Center" Foreground="White" Margin="3"></materialDesign:PackIcon>
                             <TextBlock Text="MyEvents" VerticalAlignment="Center" FontSize="18" Margin="20 10" Foreground="#FFB8B8B8"></TextBlock>
                         </StackPanel>
                     </ListViewItem>
