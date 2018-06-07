@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using Nudel.Backend.BusinessObjects;
+using Nudel.BusinessObjects;
 using System;
 using System.Collections.Generic;
 
@@ -69,7 +69,7 @@ namespace Nudel.Backend
                 return "123";
         }
 
-        public void CreateEvent(string title, string description, DateTime time, Tuple<double, double> location, List<DateTime> options)
+        public void CreateEvent(string title, string description, DateTime time, Location location, List<DateTime> options)
         {
             long id = eventCollection.Count(x => true) + 1;
 
