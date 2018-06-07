@@ -14,9 +14,7 @@ namespace Nudel.Backend
 
         public NudelService()
         {
-            mongo = new MongoClient(new MongoClientSettings {
-                Server = new MongoServerAddress("localhost", 27017)
-            });
+            mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
             db = mongo.GetDatabase("nudel");
             userCollection = db.GetCollection<User>("users");
             eventCollection = db.GetCollection<Event>("events");
