@@ -30,7 +30,8 @@ namespace Nudel.Client.Views
 
         private void ButtonPopUpLogout_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            NetworkListener.Stop();
+            Environment.Exit(0);
         }
 
         private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
