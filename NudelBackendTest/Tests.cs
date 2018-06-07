@@ -101,6 +101,7 @@ namespace NudelBackendTest
                 DeleteTestUser();
                 Assert.Fail();
             }
+
             DeleteTestUser();
         }
 
