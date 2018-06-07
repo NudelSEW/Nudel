@@ -42,6 +42,7 @@ namespace Nudel.Backend
             }
             return "1234";
         }
+
         public bool IsValidEmail(string email)
         {
             try
@@ -103,9 +104,32 @@ namespace Nudel.Backend
 
         public void SubscribeEvent(string title) => throw new NotImplementedException();
 
-        public User FindUser(long id) => throw new NotImplementedException();
-
-        public User FindUser(string usernameOrEmail) => throw new NotImplementedException();
+        public User FindUser(long id)
+        {
+            var collection = db.GetCollection<User>("users");
+            var result = collection.Find(x => x.ID == id);
+            if (result.Count() != 1)
+            {
+                return null;
+            }
+            else
+            {
+                return result.First();
+            }
+        }
+        public User FindUser(string usernameOrEmail)
+        {
+            var collection = db.GetCollection<User>("users");
+            var result = collection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+            if (result.Count() != 1)
+            {
+                return null;
+            }
+            else
+            {
+                return result.First();
+            }
+        }
 
         public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
 
