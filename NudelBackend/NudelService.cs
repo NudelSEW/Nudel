@@ -104,16 +104,13 @@ namespace Nudel.Backend
 
         public User FindUser(long id)
         {
-            var collection = db.GetCollection<User>("users");
-            var result = collection.Find(x => x.ID == id);
+            var result = userCollection.Find(x => x.ID == id);
+
             if (result.Count() != 1)
             {
                 return null;
             }
-            else
-            {
-                return result.First();
-            }
+            return result.First();
         }
         public User FindUser(string usernameOrEmail)
         {
