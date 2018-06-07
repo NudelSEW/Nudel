@@ -55,7 +55,7 @@ namespace Nudel.Backend
 
             if (results.Count() > 0)
             {
-                return "sessionToken";
+                return CreateSessionToken(results.FirstOrDefault());
             }
 
             return "{error:'passwordInvalid'";
