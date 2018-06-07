@@ -7,6 +7,7 @@ namespace Nudel.Networking.Requests.Base
     class FindEventRequest : AuthenticatedRequest
     {
         public long ID { get; set; }
+        public string Name { get; set; }
       
         public FindEventRequest() : base() { }
 
@@ -15,7 +16,10 @@ namespace Nudel.Networking.Requests.Base
             ID = id;
         }
 
-       
+        public FindEventRequest(string sessionToken, string name) : base(sessionToken)
+        {
+            Name = name;
+        }
 
     }
 }
