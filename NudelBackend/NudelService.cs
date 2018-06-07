@@ -110,20 +110,17 @@ namespace Nudel.Backend
             {
                 return null;
             }
-            return result.First();
+            return result.FirstOrDefault();
         }
         public User FindUser(string usernameOrEmail)
         {
-            var collection = db.GetCollection<User>("users");
-            var result = collection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+            var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+
             if (result.Count() != 1)
             {
                 return null;
             }
-            else
-            {
-                return result.First();
-            }
+            return result.FirstOrDefault();
         }
 
         public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
