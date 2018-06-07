@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using NudelBusinessObjects;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Nudel.BusinessObjects
     public class Event
     {
         [BsonId]
-        public long ID { get; set; }
+        public ObjectId ID { get; set; }
         [BsonElement("title")]
         public string Title { get; set; }
         [BsonElement("descriptions")]
@@ -29,7 +30,6 @@ namespace Nudel.BusinessObjects
         public Event() { }
 
         public Event(
-            long id,
             string title,
             string description,
             DateTime time,
@@ -39,7 +39,6 @@ namespace Nudel.BusinessObjects
             List<DateTime> options
         )
         {
-            ID = id;
             Title = title;
             Description = description;
             Time = time;
