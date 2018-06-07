@@ -28,28 +28,27 @@ namespace NudelBackendTest
         }
 
         [TestMethod]
-        public void TestMongoConnection()
+        public void Should_Connect_Database()
         {
-
-
+            
         }
 
         [TestMethod]
-        public void TestRegister()
+        public void Should_Register()
         {
             nudel.Register("testuser", "test@test.at", "test1234", "testname", "testnname");
             nudel.Register("testuser2", "test2@test.at", "test1234", "testname", "testnname");
         }
 
         [TestMethod]
-        public void TestLogin()
+        public void Should_Login()
         {
             nudel.Login("testuser", "test123");
             nudel.Login("test2@test.at", "test1234");
         }
         
         [TestMethod]
-        public void TestFindUser()
+        public void Should_Find_User()
         {
             nudel.FindUser(1);
         }
