@@ -85,7 +85,16 @@ namespace Nudel.Backend
             return result.FirstOrDefault();
         }
 
-        public List<Event> FindEvents(string title) => throw new NotImplementedException();
+        public List<Event> FindEvents(string title)
+        {
+            var result = eventCollection.Find(x => x.Title == title);
+
+            if (result.Count() == 0)
+            {
+                return null;
+            }
+            return result.ToList();
+        }
 
         public void SubscribeEvent(Event @event) => throw new NotImplementedException();
 
