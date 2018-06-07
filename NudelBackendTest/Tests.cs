@@ -11,6 +11,7 @@ namespace NudelBackendTest
     public class Tests
     {
         private NudelService nudel;
+        private const string sessionToken = "testToken";
 
         private MongoClient mongo;
         private IMongoDatabase db;
@@ -72,6 +73,7 @@ namespace NudelBackendTest
                 })
             };
 
+            nudel.CreateEvent(sessionToken, @event);
 
             var results = eventCollection.Find(x => x.Title == title && x.Location == location);
 
@@ -92,7 +94,7 @@ namespace NudelBackendTest
         [TestMethod]
         public void Should_Find_User()
         {
-            nudel.FindUser(1);
+            nudel.FindUser(sessionToken, 1);
         }
     }
 }
