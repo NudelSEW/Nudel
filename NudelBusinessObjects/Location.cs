@@ -4,9 +4,7 @@ namespace Nudel.BusinessObjects
 {
     public class Location
     {
-        [BsonElement("latitude")]
         public double Latitude { get; set; }
-        [BsonElement("longitude")]
         public double Longitude { get; set; }
 
         public Location(double latitude, double longitude)
