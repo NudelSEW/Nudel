@@ -19,7 +19,6 @@ namespace Nudel.Backend
         public NetworkListener()
         {
             server = new Server(PORT);
-            nudel = new NudelService();
             jsonSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All
@@ -60,6 +59,8 @@ namespace Nudel.Backend
             {
                 RegisterRequest request = rawRequest as RegisterRequest;
 
+                NudelService nudel = new NudelService();
+
                 string sessionToken = nudel.Register(
                     request.Username,
                     request.Email,
@@ -74,6 +75,8 @@ namespace Nudel.Backend
             {
                 LoginRequest request = rawRequest as LoginRequest;
 
+                NudelService nudel = new NudelService();
+
                 string sessionToken = nudel.Login(request.UsernameOrEmail, request.Password);
 
                 SendResponse(new LoginRegisterResponse(sessionToken), clientSocket);
@@ -81,6 +84,8 @@ namespace Nudel.Backend
             else if (rawRequest is CreateEventRequest)
             {
                 CreateEventRequest request = rawRequest as CreateEventRequest;
+
+                NudelService nudel = new NudelService(request.SessionToken);
 
                 Event @event = new Event
                 {
@@ -91,7 +96,7 @@ namespace Nudel.Backend
                     Options = request.Options
                 };
 
-                nudel.CreateEvent(request.SessionToken, @event);
+                nudel.CreateEvent(@event);
             }
         }
     }
