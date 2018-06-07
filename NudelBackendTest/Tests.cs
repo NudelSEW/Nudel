@@ -46,7 +46,47 @@ namespace NudelBackendTest
             nudel.Login("testuser", "test123");
             nudel.Login("test2@test.at", "test1234");
         }
-        
+
+        [TestMethod]
+        public void Should_Create_Event()
+        {
+            string title = "Should_Create_Event() Test Event";
+            Location location = new Location(46, 16);
+
+            // Delete previous Test Objects, if still persistent
+            var deleteResult = eventCollection.DeleteMany(x => x.Title == title && x.Location == location);
+            long deleted = deleteResult.DeletedCount;
+            Console.WriteLine($"Deleted: {deleted}");
+
+            nudel.CreateEvent(
+                title,
+                "Just a basic test event",
+                DateTime.Now,
+                location,
+                new List<DateTime>(new DateTime[]
+                {
+                    new DateTime(2018, 6, 10),
+                    new DateTime(2018, 6, 11),
+                    new DateTime(2018, 6, 12),
+                }
+            ));
+
+            var results = eventCollection.Find(x => x.Title == title && x.Location == location);
+
+            if (results.Count() == 1)
+            {
+                Event foundEvent = results.FirstOrDefault();
+                Console.WriteLine($"Result: {foundEvent.ID}");
+
+                // Remove Test Object after test
+                eventCollection.DeleteOne(x => x.ID == foundEvent.ID);
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+
         [TestMethod]
         public void Should_Find_User()
         {
