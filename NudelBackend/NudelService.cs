@@ -61,41 +61,63 @@ namespace Nudel.Backend
             return "{error:'passwordInvalid'";
         }
 
+        public void Logout(string usernameOrEmail, string password)
+        {
+            userCollection.UpdateOne(
+                x => x.Username == usernameOrEmail || x.Email == usernameOrEmail,
+                Builders<User>.Update.Set(x => x.SessionToken, "")
+            );
+        }
+
         public void CreateEvent(string sessionToken, Event @event)
         {
-            long id = eventCollection.Count(x => true) + 1;
+            User user = CheckSessionToken(sessionToken);
 
-            var result = userCollection.Find(x => x.SessionToken == sessionToken);
-
-            if (result.Count() == 1)
+            if (user != null)
             {
-                User user = result.FirstOrDefault();
-                @event.Owner = user;
-            }
+                long id = eventCollection.Count(x => true) + 1;
 
-            eventCollection.InsertOne(@event);
+                @event.Owner = user;
+
+                eventCollection.InsertOne(@event);
+            }
         }
 
         public Event FindEvent(string sessionToken, long id)
         {
-            var result = eventCollection.Find(x => x.ID == id);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() != 1)
+            if (user != null)
             {
-                return null;
+                var result = eventCollection.Find(x => x.ID == id);
+
+                if (result.Count() != 1)
+                {
+                    return null;
+                }
+
+                return result.FirstOrDefault();
             }
-            return result.FirstOrDefault();
+
+            return null;
         }
 
         public List<Event> FindEvents(string sessionToken, string title)
         {
-            var result = eventCollection.Find(x => x.Title == title);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() == 0)
+            if (user != null)
             {
-                return null;
+                var result = eventCollection.Find(x => x.Title == title);
+
+                if (result.Count() == 0)
+                {
+                    return null;
+                }
+                return result.ToList();
             }
-            return result.ToList();
+
+            return null;
         }
 
         public void SubscribeEvent(string sessionToken, Event @event) => throw new NotImplementedException();
@@ -106,23 +128,38 @@ namespace Nudel.Backend
 
         public User FindUser(string sessionToken, long id)
         {
-            var result = userCollection.Find(x => x.ID == id);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() != 1)
+            if (user != null)
             {
-                return null;
+                var result = userCollection.Find(x => x.ID == id);
+
+                if (result.Count() != 1)
+                {
+                    return null;
+                }
+                return result.FirstOrDefault();
             }
-            return result.FirstOrDefault();
+
+            return null;
         }
+
         public User FindUser(string sessionToken, string usernameOrEmail)
         {
-            var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() != 1)
+            if (user != null)
             {
-                return null;
+                var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+
+                if (result.Count() != 1)
+                {
+                    return null;
+                }
+                return result.FirstOrDefault();
             }
-            return result.FirstOrDefault();
+
+            return null;
         }
 
         public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
