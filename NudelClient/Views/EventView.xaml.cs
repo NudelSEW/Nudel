@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nudel.Client.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,16 @@ namespace Nudel.Client.Views
         public EventView()
         {
             InitializeComponent();
+        }
+
+        private void EventView_Loaded(object sender, RoutedEventArgs e)
+        {
+            EventCardView card = new EventCardView
+            {
+                DataContext = new EventCardViewModel("Test Event", "This is a test event")
+            };
+
+            mainGrid.Children.Add(card);
         }
     }
 }
