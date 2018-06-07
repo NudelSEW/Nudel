@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
-namespace Nudel.Backend.BusinessObjects
+namespace Nudel.BusinessObjects
 {
     public class User
     {

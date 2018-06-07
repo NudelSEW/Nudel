@@ -1,4 +1,4 @@
-﻿namespace Nudel.Backend.BusinessObjects
+﻿namespace Nudel.BusinessObjects
 {
     public struct Location
     {
@@ -10,5 +10,4 @@
             Latitude = latitude;
             Longitude = longitude;
         }
-    }
 }

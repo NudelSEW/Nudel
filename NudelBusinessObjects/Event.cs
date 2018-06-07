@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Nudel.Backend.BusinessObjects
+namespace Nudel.BusinessObjects
 {
     public class Event
     {
@@ -15,7 +15,7 @@ namespace Nudel.Backend.BusinessObjects
         [BsonElement("time")]
         public DateTime Time { get; set; }
         [BsonElement("location")]
-        public Tuple<double, double> Location { get; set; }
+        public Location Location { get; set; }
         [BsonElement("owner")]
         public User Owner { get; set; }
         [BsonElement("members")]
@@ -29,7 +29,7 @@ namespace Nudel.Backend.BusinessObjects
             string title,
             string description,
             DateTime time,
-            Tuple<double, double> location,
+            Location location,
             User owner,
             List<User> members,
             List<DateTime> options
