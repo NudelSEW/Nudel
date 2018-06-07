@@ -125,5 +125,16 @@ namespace Nudel.Backend
         public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
 
         public void NotifyUsers(Event @event, List<User> user) => throw new NotImplementedException();
+        private User CheckSessionToken(string sessionToken)
+        {
+            var result = userCollection.Find(x => x.SessionToken == sessionToken);
+
+            if (result.Count() == 1)
+            {
+                return result.FirstOrDefault();
+            }
+
+            return null;
+        }
     }
 }
