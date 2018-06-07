@@ -2,6 +2,7 @@
 using Nudel.BusinessObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nudel.Backend
 {
@@ -19,7 +20,7 @@ namespace Nudel.Backend
             userCollection = db.GetCollection<User>("users");
             eventCollection = db.GetCollection<Event>("events");
         }
-
+        
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
             long id = userCollection.Count(x => true) + 1;
@@ -27,7 +28,7 @@ namespace Nudel.Backend
             var results = userCollection.Find(x => x.Username == username || x.Email == email);
 
             if (results.Count() == 0) {
-                userCollection.InsertOne(new User
+                User user = new User
                 {
                     ID = id,
                     Username = username,
@@ -35,13 +36,15 @@ namespace Nudel.Backend
                     Password = password,
                     FirstName = firstName,
                     LastName = lastName
-                });
+                };
 
-                return "sessionToken";
+                userCollection.InsertOne(user);
+
+                return CreateSessionToken(user);
             }
             else
             {
-                return "{error:'passwordInvalid'";
+                return "{error:'passwordInvalid'}";
             }
         }
 
@@ -52,47 +55,69 @@ namespace Nudel.Backend
 
             if (results.Count() > 0)
             {
-                return "sessionToken";
+                return CreateSessionToken(results.FirstOrDefault());
             }
 
             return "{error:'passwordInvalid'";
         }
 
+        public void Logout(string usernameOrEmail, string password)
+        {
+            userCollection.UpdateOne(
+                x => x.Username == usernameOrEmail || x.Email == usernameOrEmail,
+                Builders<User>.Update.Set(x => x.SessionToken, "")
+            );
+        }
+
         public void CreateEvent(string sessionToken, Event @event)
         {
-            long id = eventCollection.Count(x => true) + 1;
+            User user = CheckSessionToken(sessionToken);
 
-            var result = userCollection.Find(x => x.SessionToken == sessionToken);
-
-            if (result.Count() == 1)
+            if (user != null)
             {
-                User user = result.FirstOrDefault();
-                @event.Owner = user;
-            }
+                long id = eventCollection.Count(x => true) + 1;
 
-            eventCollection.InsertOne(@event);
+                @event.Owner = user;
+
+                eventCollection.InsertOne(@event);
+            }
         }
 
         public Event FindEvent(string sessionToken, long id)
         {
-            var result = eventCollection.Find(x => x.ID == id);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() != 1)
+            if (user != null)
             {
-                return null;
+                var result = eventCollection.Find(x => x.ID == id);
+
+                if (result.Count() != 1)
+                {
+                    return null;
+                }
+
+                return result.FirstOrDefault();
             }
-            return result.FirstOrDefault();
+
+            return null;
         }
 
         public List<Event> FindEvents(string sessionToken, string title)
         {
-            var result = eventCollection.Find(x => x.Title == title);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() == 0)
+            if (user != null)
             {
-                return null;
+                var result = eventCollection.Find(x => x.Title == title);
+
+                if (result.Count() == 0)
+                {
+                    return null;
+                }
+                return result.ToList();
             }
-            return result.ToList();
+
+            return null;
         }
 
         public void SubscribeEvent(string sessionToken, Event @event) => throw new NotImplementedException();
@@ -103,23 +128,38 @@ namespace Nudel.Backend
 
         public User FindUser(string sessionToken, long id)
         {
-            var result = userCollection.Find(x => x.ID == id);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() != 1)
+            if (user != null)
             {
-                return null;
+                var result = userCollection.Find(x => x.ID == id);
+
+                if (result.Count() != 1)
+                {
+                    return null;
+                }
+                return result.FirstOrDefault();
             }
-            return result.FirstOrDefault();
+
+            return null;
         }
+
         public User FindUser(string sessionToken, string usernameOrEmail)
         {
-            var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+            User user = CheckSessionToken(sessionToken);
 
-            if (result.Count() != 1)
+            if (user != null)
             {
-                return null;
+                var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+
+                if (result.Count() != 1)
+                {
+                    return null;
+                }
+                return result.FirstOrDefault();
             }
-            return result.FirstOrDefault();
+
+            return null;
         }
 
         public void NotifyUser(Event @event, User user) => throw new NotImplementedException();
@@ -128,8 +168,16 @@ namespace Nudel.Backend
 
         private string CreateSessionToken(User user)
         {
-            return "";
+            string hash = CreateRandomString(64);
+            string sessionToken = $"{user.Username}-{hash}";
+
+            user.SessionToken = sessionToken;
+
+            userCollection.UpdateOne(x => x.ID == user.ID, Builders<User>.Update.Set(x => x.SessionToken, user.SessionToken));
+
+            return sessionToken;
         }
+
         private User CheckSessionToken(string sessionToken)
         {
             var result = userCollection.Find(x => x.SessionToken == sessionToken);
@@ -140,6 +188,14 @@ namespace Nudel.Backend
             }
 
             return null;
+        }
+
+        private static string CreateRandomString(int length)
+        {
+            Random random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

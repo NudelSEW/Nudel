@@ -2,12 +2,12 @@
 
 namespace Nudel.Networking.Responses
 {
-    public class LoginResponse : Response
+    public class LoginRegisterResponse : Response
     {
         public string SessionToken;
 
-        public LoginResponse() { }
-        public LoginResponse(string sessionToken) : base()
+        public LoginRegisterResponse() { }
+        public LoginRegisterResponse(string sessionToken) : base()
         {
             SessionToken = sessionToken;
         }

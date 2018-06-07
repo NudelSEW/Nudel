@@ -68,7 +68,7 @@ namespace Nudel.Backend
                     request.LastName
                 );
 
-                SendResponse(new LoginResponse(sessionToken), clientSocket);
+                SendResponse(new LoginRegisterResponse(sessionToken), clientSocket);
             }
             else if (rawRequest is LoginRequest)
             {
@@ -76,7 +76,7 @@ namespace Nudel.Backend
 
                 string sessionToken = nudel.Login(request.UsernameOrEmail, request.Password);
 
-                SendResponse(new LoginResponse(sessionToken), clientSocket);
+                SendResponse(new LoginRegisterResponse(sessionToken), clientSocket);
             }
             else if (rawRequest is CreateEventRequest)
             {

@@ -56,9 +56,9 @@ namespace Nudel.Client
 
             Console.WriteLine($"Received Response of Type: {rawResponse.GetType()}");
 
-            if (rawResponse is LoginResponse)
+            if (rawResponse is LoginRegisterResponse)
             {
-                LoginResponse response = rawResponse as LoginResponse;
+                LoginRegisterResponse response = rawResponse as LoginRegisterResponse;
             }
         }
     }
