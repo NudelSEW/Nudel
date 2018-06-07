@@ -159,11 +159,16 @@ namespace Nudel.Backend
             return result.ToList();
         }
 
-        public void SubscribeEvent(Event @event) => throw new NotImplementedException();
+        public void InviteToEvent(Event @event, User user)
+        {
 
-        public void SubscribeEvent(long id) => throw new NotImplementedException();
+        }
 
-        public void SubscribeEvent(string title) => throw new NotImplementedException();
+        public void InviteToEvent(long eventId, User user) => throw new NotImplementedException();
+
+        public void InviteToEvent(Event @event, long userId) => throw new NotImplementedException();
+
+        public void InviteToEvent(long eventId, long userId) => throw new NotImplementedException();
 
         #endregion
 
