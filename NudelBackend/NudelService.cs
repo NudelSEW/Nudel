@@ -124,6 +124,10 @@ namespace Nudel.Backend
             eventCollection.InsertOne(@event);
         }
 
+        public void EditEvent(Event newEvent) => throw new NotImplementedException();
+
+        public void EditEvent(long id, Event newEvent) => throw new NotImplementedException();
+
         public void DeleteEvent(Event @event) => throw new NotImplementedException();
 
         public void DeleteEvent(long id) => throw new NotImplementedException();
