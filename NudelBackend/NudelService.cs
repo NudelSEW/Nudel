@@ -49,14 +49,13 @@ namespace Nudel.Backend
         {
             var collection = db.GetCollection<User>("users");
             var results = collection.Find(x => x.Username == usernameOrEmail && x.Password == password || x.Email == usernameOrEmail && x.Password == password);
+
             if (results.Count() > 0)
             {
                 return "sessionToken";
             }
-            else
-            {
-                return "{error:'passwordInvalid'";
-            }
+
+            return "{error:'passwordInvalid'";
         }
 
         public void CreateEvent(string sessionToken, Event @event)
