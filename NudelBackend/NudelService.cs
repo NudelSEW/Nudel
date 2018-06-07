@@ -205,6 +205,10 @@ namespace Nudel.Backend
             return result.FirstOrDefault();
         }
 
+        public void EditUser(User newUser) => throw new NotImplementedException();
+
+        public void DeleteUser(User user) => throw new NotImplementedException();
+
         #endregion
 
         #region Utilities
