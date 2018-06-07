@@ -84,9 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessObjects\Event.cs" />
-    <Compile Include="BusinessObjects\Location.cs" />
-    <Compile Include="BusinessObjects\User.cs" />
     <Compile Include="NetworkListener.cs" />
     <Compile Include="NudelService.cs" />
     <Compile Include="Program.cs" />
@@ -112,6 +109,10 @@
     <ProjectReference Include="..\JustConnect\JustConnect.csproj">
       <Project>{39456e4f-f136-4682-b7ba-5096438b7ea3}</Project>
       <Name>JustConnect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NudelBusinessObjects\NudelBusinessObjects.csproj">
+      <Project>{7B35E02F-7AD7-4CDD-8C37-A9FCC4BE4386}</Project>
+      <Name>NudelBusinessObjects</Name>
     </ProjectReference>
     <ProjectReference Include="..\NudelNetworking\NudelNetworking.csproj">
       <Project>{0df5a56b-3e63-4ff7-8408-0fad86170a0b}</Project>
