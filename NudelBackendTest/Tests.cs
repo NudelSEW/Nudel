@@ -58,18 +58,20 @@ namespace NudelBackendTest
             long deleted = deleteResult.DeletedCount;
             Console.WriteLine($"Deleted: {deleted}");
 
-            nudel.CreateEvent(
-                title,
-                "Just a basic test event",
-                DateTime.Now,
-                location,
-                new List<DateTime>(new DateTime[]
+            Event @event = new Event
+            {
+                Title = title,
+                Description = "Just a basic test event",
+                Time = DateTime.Now,
+                Location = location,
+                Options = new List<DateTime>(new DateTime[]
                 {
                     new DateTime(2018, 6, 10),
                     new DateTime(2018, 6, 11),
                     new DateTime(2018, 6, 12),
-                }
-            ));
+                })
+            };
+
 
             var results = eventCollection.Find(x => x.Title == title && x.Location == location);
 
