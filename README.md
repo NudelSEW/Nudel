@@ -13,4 +13,4 @@ Danach ist es möglich ein Event zu erstellen, bearbeiten, löschen und mehr.
 
 ## Design - UML
 
-[!alt text](NudelClassDiagram.svg)
+![alt text](NudelClassDiagram.svg)
