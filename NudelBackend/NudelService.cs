@@ -73,7 +73,7 @@ namespace Nudel.Backend
             eventCollection.InsertOne(@event);
         }
 
-        public Event FindEvent(long id)
+        public Event FindEvent(string sessionToken, long id)
         {
             var result = eventCollection.Find(x => x.ID == id);
 
@@ -84,7 +84,7 @@ namespace Nudel.Backend
             return result.FirstOrDefault();
         }
 
-        public List<Event> FindEvents(string title)
+        public List<Event> FindEvents(string sessionToken, string title)
         {
             var result = eventCollection.Find(x => x.Title == title);
 
@@ -95,13 +95,13 @@ namespace Nudel.Backend
             return result.ToList();
         }
 
-        public void SubscribeEvent(Event @event) => throw new NotImplementedException();
+        public void SubscribeEvent(string sessionToken, Event @event) => throw new NotImplementedException();
 
-        public void SubscribeEvent(long id) => throw new NotImplementedException();
+        public void SubscribeEvent(string sessionToken, long id) => throw new NotImplementedException();
 
-        public void SubscribeEvent(string title) => throw new NotImplementedException();
+        public void SubscribeEvent(string sessionToken, string title) => throw new NotImplementedException();
 
-        public User FindUser(long id)
+        public User FindUser(string sessionToken, long id)
         {
             var result = userCollection.Find(x => x.ID == id);
 
@@ -111,7 +111,7 @@ namespace Nudel.Backend
             }
             return result.FirstOrDefault();
         }
-        public User FindUser(string usernameOrEmail)
+        public User FindUser(string sessionToken, string usernameOrEmail)
         {
             var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
 
