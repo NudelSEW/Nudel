@@ -22,11 +22,11 @@ namespace Nudel.Backend
 
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
-            long id = userCollection.Count(x=>true) + 1;
+            long id = userCollection.Count(x => true) + 1;
 
             var results = userCollection.Find(x => x.Username == username || x.Email == email);
 
-            if (results.Count() == 0)
+            if (results.Count() == 0) {
                 userCollection.InsertOne(new User
                 {
                     ID = id,
