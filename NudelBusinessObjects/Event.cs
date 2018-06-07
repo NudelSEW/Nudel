@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using NudelBusinessObjects;
 using System;
 using System.Collections.Generic;
 
@@ -22,8 +23,11 @@ namespace Nudel.BusinessObjects
         public List<User> Members { get; set; }
         [BsonElement("options")]
         public List<DateTime> Options { get; set; }
+        [BsonElement("comments")]
+        public List<Comment> Comments { get; set; }
 
         public Event() { }
+
         public Event(
             long id,
             string title,
