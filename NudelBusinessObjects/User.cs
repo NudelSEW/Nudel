@@ -7,7 +7,7 @@ namespace Nudel.BusinessObjects
     public class User
     {
         [BsonId]
-        public long ID { get; set; }
+        public ObjectId ID { get; set; }
         [BsonElement("username")]
         public string Username { get; set; }
         [BsonElement("email")]
@@ -26,9 +26,9 @@ namespace Nudel.BusinessObjects
         public string SessionToken { get; set; }
 
         public User() { }
-        public User(long id, string username, string email, string password, string firstName, string lastName)
+
+        public User(string username, string email, string password, string firstName, string lastName)
         {
-            ID = id;
             Username = username;
             Email = email;
             Password = password;

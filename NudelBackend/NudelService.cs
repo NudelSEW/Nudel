@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using Nudel.BusinessObjects;
 using System;
 using System.Collections.Generic;
@@ -57,14 +58,12 @@ namespace Nudel.Backend
         /// <returns></returns>
         public string Register(string username, string email, string password, string firstName, string lastName)
         {
-            long id = userCollection.Count(x => true) + 1;
-
             var results = userCollection.Find(x => x.Username == username || x.Email == email);
 
             if (results.Count() == 0) {
                 User user = new User
                 {
-                    ID = id,
+                    ID = ObjectId.GenerateNewId(),
                     Username = username,
                     Email = email,
                     Password = password,
@@ -117,8 +116,7 @@ namespace Nudel.Backend
         {
             CheckSessionTokenProvided();
 
-            long id = eventCollection.Count(x => true) + 1;
-
+            @event.ID = ObjectId.GenerateNewId();
             @event.Owner = user;
 
             eventCollection.InsertOne(@event);
@@ -132,7 +130,7 @@ namespace Nudel.Backend
 
         public void DeleteEvent(long id) => throw new NotImplementedException();
 
-        public Event FindEvent(long id)
+        public Event FindEvent(ObjectId id)
         {
             CheckSessionTokenProvided();
 
@@ -174,10 +172,9 @@ namespace Nudel.Backend
 
         #region Users
 
-        public User FindUser(long id)
+        public User FindUser(ObjectId id)
         {
             CheckSessionTokenProvided();
-
             var result = userCollection.Find(x => x.ID == id);
 
             if (result.Count() != 1)
