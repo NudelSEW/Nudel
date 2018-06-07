@@ -20,6 +20,8 @@ namespace Nudel.BusinessObjects
         public string LastName { get; set; }
         [BsonElement("ownedEvents")]
         public List<Event> OwnedEvents { get; set; }
+        [BsonElement("sessionToken")]
+        public string SessionToken { get; set; }
 
         public User() { }
         public User(long id, string username, string email, string password, string firstName, string lastName, List<Event> ownedEvents)
