@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using Nudel.BusinessObjects;
+using NudelBusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -180,6 +181,10 @@ namespace Nudel.Backend
                 userCollection.ReplaceOne(x => x.ID == user.ID, user);
             }
         }
+
+        public void AddComment(Event @event, Comment comment) => throw new NotImplementedException();
+
+        public void DeleteComment(Event @event, Comment comment) => throw new NotImplementedException();
 
         #endregion
 
