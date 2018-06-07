@@ -101,6 +101,11 @@ namespace NudelBackendTest
         {
             nudel.FindEvents(sessionToken, "TGM");
         }
+        [TestMethod]
+        public void Should_Find_User_String()
+        {
+            nudel.FindUser("", "");
+        }
 
     }
 }
