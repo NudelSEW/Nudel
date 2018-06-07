@@ -128,8 +128,16 @@ namespace Nudel.Backend
 
         private string CreateSessionToken(User user)
         {
-            return "";
+            string hash = CreateRandomString(64);
+            string sessionToken = $"{user.Username}-{hash}";
+
+            user.SessionToken = sessionToken;
+
+            userCollection.UpdateOne(x => x.ID == user.ID, Builders<User>.Update.Set(x => x.SessionToken, user.SessionToken));
+
+            return sessionToken;
         }
+
         private User CheckSessionToken(string sessionToken)
         {
             var result = userCollection.Find(x => x.SessionToken == sessionToken);
