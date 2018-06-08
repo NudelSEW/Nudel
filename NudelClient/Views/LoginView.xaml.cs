@@ -31,9 +31,20 @@ namespace Nudel.Client.Views
                 Password = password.Password
             };
 
-            NetworkListener.SendRequest(request);
+            ModelChangedHandler handler = null;
+            handler = (string fieldName, Object field) =>
+            {
+                if (fieldName == "SessionToken")
+                {
+                    MainViewModel.CurrentView = new HomeView();
+                }
 
-            MainViewModel.CurrentView = new HomeView();
+                MainModel.ModelChanged -= handler;
+            };
+
+            MainModel.ModelChanged += handler;
+
+            NetworkListener.SendRequest(request);   
         }
     }
 }

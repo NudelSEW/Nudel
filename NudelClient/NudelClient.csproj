@@ -87,6 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MainModel.cs" />
     <Compile Include="NetworkListener.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\EventCardViewModel.cs" />
@@ -94,6 +95,9 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\EventCardView.xaml.cs">
       <DependentUpon>EventCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EventDetailView.xaml.cs">
+      <DependentUpon>EventDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EventView.xaml.cs">
       <DependentUpon>EventView.xaml</DependentUpon>
@@ -126,6 +130,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\EventCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EventDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,6 +206,10 @@
     <ProjectReference Include="..\JustConnect\JustConnect.csproj">
       <Project>{39456e4f-f136-4682-b7ba-5096438b7ea3}</Project>
       <Name>JustConnect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NudelBusinessObjects\NudelBusinessObjects.csproj">
+      <Project>{7b35e02f-7ad7-4cdd-8c37-a9fcc4be4386}</Project>
+      <Name>NudelBusinessObjects</Name>
     </ProjectReference>
     <ProjectReference Include="..\NudelNetworking\NudelNetworking.csproj">
       <Project>{0df5a56b-3e63-4ff7-8408-0fad86170a0b}</Project>

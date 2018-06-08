@@ -1,4 +1,5 @@
-﻿using Nudel.Client.Views;
+﻿using Nudel.BusinessObjects;
+using Nudel.Client.Views;
 using System.ComponentModel;
 using System.Windows.Controls;
 

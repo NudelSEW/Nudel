@@ -1,4 +1,6 @@
-﻿using Nudel.Client.ViewModels;
+﻿using Nudel.BusinessObjects;
+using Nudel.Client.ViewModels;
+using Nudel.Networking.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +30,32 @@ namespace Nudel.Client.Views
 
         private void EventView_Loaded(object sender, RoutedEventArgs e)
         {
-            EventCardView card = new EventCardView
+            GetUserRequest request = new GetUserRequest(MainModel.SessionToken);
+
+            ModelChangedHandler handler = null;
+            handler = (string fieldName, Object field) =>
             {
-                DataContext = new EventCardViewModel("Test Event", "This is a test event")
+                if (fieldName == "User")
+                {
+                    foreach (Event @event in MainModel.User.JoinedEvents)
+                    {
+                        mainGrid.Children.Add(new EventCardView
+                        {
+                            DataContext = new EventCardViewModel
+                            {
+                                Title = @event.Title,
+                                Description = @event.Description
+                            }
+                        });
+                    }
+                }
+
+                MainModel.ModelChanged -= handler;
             };
 
-            mainGrid.Children.Add(card);
+            MainModel.ModelChanged += handler;
+
+            NetworkListener.SendRequest(request);
         }
     }
 }

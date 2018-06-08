@@ -190,6 +190,13 @@ namespace Nudel.Backend
 
         #region Users
 
+        public User GetUser()
+        {
+            CheckSessionTokenProvided();
+
+            return userCollection.Find(x => x.ID == user.ID).FirstOrDefault();
+        }
+
         public User FindUser(ObjectId id)
         {
             CheckSessionTokenProvided();

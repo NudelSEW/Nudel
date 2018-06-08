@@ -7,7 +7,7 @@
              xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
              xmlns:local="clr-namespace:Nudel.Client.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" Width="982.097">
+             d:DesignHeight="100" Width="200">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,51 +20,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <materialDesign:Card Width="200" Padding="20">
-        <StackPanel Orientation="Vertical">
-            <Image Height="50" Stretch="UniformToFill" />
-            <Label Content="{Binding Path=Title}" />
-            <Label Content="{Binding Path=Description}" />
-        </StackPanel>
-    </materialDesign:Card>
-
-    <!--<WrapPanel Margin="0 0 8 8">
-        <smtx:XamlDisplay Key="cards_1" Margin="4 4 0 0" VerticalContentAlignment="Top">
-            <materialDesign:Card Width="200">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="140" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Image Source="Resources/Chartridge046_small.jpg" Height="140" Width="196" Stretch="UniformToFill" />
-                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0 0 16 -20">
-                        <materialDesign:PackIcon Kind="Bike" />
-                    </Button>
-                    <StackPanel Grid.Row="1" Margin="8 24 8 0" >
-                        <TextBlock FontWeight="Bold">Cycling</TextBlock>
-                        <TextBlock TextWrapping="Wrap" VerticalAlignment="Center">A great way to keep fit and forget about the constant grind of IT.</TextBlock>
-                    </StackPanel>
-                    <StackPanel HorizontalAlignment="Right" Grid.Row="2" Orientation="Horizontal" Margin="8">
-                        <Button Style="{StaticResource MaterialDesignToolButton}" Width="30" Padding="2 0 2 0"
-                            materialDesign:RippleAssist.IsCentered="True">
-                            <materialDesign:PackIcon Kind="ShareVariant" />
-                        </Button>
-                        <Button Style="{StaticResource MaterialDesignToolButton}" Width="30" Padding="2 0 2 0"
-                            materialDesign:RippleAssist.IsCentered="True">
-                            <materialDesign:PackIcon Kind="Heart" />
-                        </Button>
-                        <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" Padding="2 0 2 0">
-                            <StackPanel>
-                                <Button Content="More"/>
-                                <Button Content="Options"/>
-                            </StackPanel>
-                        </materialDesign:PopupBox>
-                    </StackPanel>
-                </Grid>
-            </materialDesign:Card>
-        </smtx:XamlDisplay>
-    </WrapPanel>-->
+    <Grid>
+        <materialDesign:Card Width="200" Padding="20">
+            <StackPanel Orientation="Vertical">
+                <Label Content="{Binding Path=Title}" />
+                <Label Content="{Binding Path=Description}" />
+            </StackPanel>
+        </materialDesign:Card>
+    </Grid>
 </UserControl>

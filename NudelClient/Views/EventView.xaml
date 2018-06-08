@@ -3,31 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:domain="clr-namespace:MaterialDesignColors.WpfExample.Domain"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:domain1="clr-namespace:MaterialDesignDemo.Domain"
              xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="600" Loaded="UserControl_Loaded">
-    <Grid Background="#FFEAE9E9">
-
-        <StackPanel Background="#FFEAE9E9" HorizontalAlignment="Left" Margin="300 70 20 10">
-            <DatePicker   materialDesign:HintAssist.Hint="Date" Width="100" Margin="10"/>
-            <materialDesign:TimePicker  materialDesign:HintAssist.Hint="Time" Width="100"/>
-        </StackPanel>
+             d:DesignHeight="300" d:DesignWidth="500" Loaded="EventView_Loaded">
+    <Grid Name="mainGrid">
         
-        <StackPanel Background="#FFEAE9E9" HorizontalAlignment="Left" Margin="150 70 20 10">
-            <TextBox  materialDesign:HintAssist.Hint="Titel" Width="100" Margin="10"/>
-        </StackPanel>
-        
-        <StackPanel Background="#FFEAE9E9" Margin="150 170 190 10">
-            <GroupBox Header="Description" Height="100">
-            </GroupBox>
-        </StackPanel>
-
-        <StackPanel Background="#FFEAE9E9" Margin="455,250,30,30">
-            <Button Content="Create Event" Height="20" FontSize="10" FontWeight="Normal" HorizontalAlignment="Left">
-            </Button>
-        </StackPanel>
     </Grid>
 </UserControl>

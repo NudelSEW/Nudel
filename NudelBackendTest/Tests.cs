@@ -45,6 +45,8 @@ namespace NudelBackendTest
         {
             NudelService nudel = new NudelService();
 
+            nudel.Register("chris", "chris@chris.com", "chris", "chris", "chris");
+
             DeleteTestUser();
         }
 
