@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Nudel.Networking.Requests.Base;
 using Nudel.Networking.Responses;
+using Nudel.Networking.Responses.Base;
 using System;
 using System.Net;
 using TcpClient = JustConnect.Tcp.Client;
@@ -46,7 +47,7 @@ namespace Nudel.Client
 
         public static void SendRequest(Request request)
         {
-            string requestString = JsonConvert.SerializeObject(request);
+            string requestString = JsonConvert.SerializeObject(request, jsonSettings);
             client.Send(requestString);
         }
 
@@ -54,11 +55,19 @@ namespace Nudel.Client
         {
             Object rawResponse = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
 
-            Console.WriteLine($"Received Response of Type: {rawResponse.GetType()}");
+            Log?.Invoke($"Received Response of Type: {rawResponse.GetType()}");
 
             if (rawResponse is LoginRegisterResponse)
             {
                 LoginRegisterResponse response = rawResponse as LoginRegisterResponse;
+
+                MainModel.SessionToken = response.SessionToken;
+            }
+            else if (rawResponse is GetUserResponse)
+            {
+                GetUserResponse response = rawResponse as GetUserResponse;
+
+                MainModel.User = response.User;
             }
         }
     }

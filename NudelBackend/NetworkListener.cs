@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Nudel.BusinessObjects;
 using Nudel.Networking.Requests;
+using Nudel.Networking.Requests.Base;
 using Nudel.Networking.Responses;
 using Nudel.Networking.Responses.Base;
 using System;
@@ -45,7 +46,7 @@ namespace Nudel.Backend
 
         public void SendResponse(Response response, Socket clientSocket)
         {
-            string responseString = JsonConvert.SerializeObject(response);
+            string responseString = JsonConvert.SerializeObject(response, jsonSettings);
             server.Send(responseString, clientSocket);
         }
 
@@ -53,7 +54,7 @@ namespace Nudel.Backend
         {
             Object rawRequest = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
 
-            //Console.WriteLine($"Received Request of Type: {rawRequest.GetType()}");
+            Log($"Received Request of Type: {rawRequest.GetType()}");
 
             if (rawRequest is RegisterRequest)
             {
@@ -97,6 +98,14 @@ namespace Nudel.Backend
                 };
 
                 nudel.CreateEvent(@event);
+            }
+            else if (rawRequest is GetUserRequest)
+            {
+                GetUserRequest request = rawRequest as GetUserRequest;
+
+                NudelService nudel = new NudelService(request.SessionToken);
+
+                SendResponse(new GetUserResponse(nudel.GetUser()), clientSocket);
             }
         }
     }
