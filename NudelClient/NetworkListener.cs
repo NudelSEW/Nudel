@@ -1,5 +1,6 @@
 ﻿using JustConnect.Tcp;
 using Newtonsoft.Json;
+using Nudel.Client.Model;
 using Nudel.Networking.Requests.Base;
 using Nudel.Networking.Responses;
 using Nudel.Networking.Responses.Base;
@@ -38,22 +39,28 @@ namespace Nudel.Client
         public static void Start()
         {
             client.Connect(IPAddress.Loopback);
+
+            Log?.Invoke("NetworkListener started");
         }
 
         public static void Stop()
         {
             client.Disconnect();
+
+            Log?.Invoke("NetworkListener stopped");
         }
 
         public static void SendRequest(Request request)
         {
             string requestString = JsonConvert.SerializeObject(request, jsonSettings);
             client.Send(requestString);
+
+            Log?.Invoke("Sent request to backend");
         }
 
         public static void ProcessResponse(string data)
         {
-            Object rawResponse = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
+            object rawResponse = JsonConvert.DeserializeObject<object>(data, jsonSettings);
 
             Log?.Invoke($"Received Response of Type: {rawResponse.GetType()}");
 

@@ -52,7 +52,7 @@ namespace Nudel.Backend
 
         private void ProcessRequest(string data, Socket clientSocket)
         {
-            Object rawRequest = JsonConvert.DeserializeObject<Object>(data, jsonSettings);
+            object rawRequest = JsonConvert.DeserializeObject<object>(data, jsonSettings);
 
             Log($"Received Request of Type: {rawRequest.GetType()}");
 
