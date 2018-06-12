@@ -7,7 +7,8 @@
              xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
              xmlns:local="clr-namespace:Nudel.Client.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="HomeView_Loaded">
 
     <UserControl.Resources>
         <Storyboard x:Key="MenuOpen">
@@ -55,7 +56,7 @@
             <materialDesign:PackIcon Kind="Magnify" Margin="357,10,253,8" Foreground="White" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Grid.Column="1" VerticalAlignment="Stretch" RenderTransformOrigin="0.465,-0.37"/>
             <!-- Right Menu -->
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0,4,0,5">
-                <TextBlock Text="Oliver Vicovac" VerticalAlignment="Center" FontSize="18" Foreground="#FFB8B8B8"></TextBlock>
+                <TextBlock Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontSize="18" Foreground="#FFB8B8B8"></TextBlock>
                 <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Foreground="#FFB8B8B8" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                     <StackPanel Width="150">
                         <Button Content="Settings"></Button>

@@ -1,4 +1,7 @@
-﻿using Nudel.Client.ViewModels;
+﻿using Nudel.BusinessObjects;
+using Nudel.Client.Model;
+using Nudel.Client.ViewModels;
+using Nudel.Networking.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Nudel.Client.Views
 {
@@ -26,7 +30,30 @@ namespace Nudel.Client.Views
             InitializeComponent();
             DataContext = new HomeViewModel();
         }
-    
+
+        private void HomeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
+                GetUserRequest request = new GetUserRequest(MainModel.SessionToken);
+                NetworkListener.SendRequest(request);
+            }));
+
+            ModelChangedHandler handler = null;
+            handler = (string fieldName, Object field) =>
+            {
+                if (fieldName == "User")
+                {
+                    User user = MainModel.User;
+
+                    ((HomeViewModel)DataContext).DisplayName = $"{user.FirstName} {user.LastName} ({user.Username})";
+                }
+
+                MainModel.ModelChanged -= handler;
+            };
+
+            MainModel.ModelChanged += handler;
+        }
+
 
         private void ButtonPopUpLogout_Click(object sender, RoutedEventArgs e)
         {
