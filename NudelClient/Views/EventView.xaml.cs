@@ -1,4 +1,5 @@
 ﻿using Nudel.BusinessObjects;
+using Nudel.Client.Model;
 using Nudel.Client.ViewModels;
 using Nudel.Networking.Requests;
 using System;
@@ -30,22 +31,32 @@ namespace Nudel.Client.Views
 
         private void EventView_Loaded(object sender, RoutedEventArgs e)
         {
-            GetUserRequest request = new GetUserRequest(MainModel.SessionToken);
-
             ModelChangedHandler handler = null;
             handler = (string fieldName, Object field) =>
             {
                 if (fieldName == "User")
                 {
-                    foreach (Event @event in MainModel.User.JoinedEvents)
+                    User user = MainModel.User;
+                    
+                    if (user.JoinedEvents != null)
                     {
-                        mainGrid.Children.Add(new EventCardView
+                        foreach (Event @event in MainModel.User.JoinedEvents)
                         {
-                            DataContext = new EventCardViewModel
+                            mainGrid.Children.Add(new EventCardView
                             {
-                                Title = @event.Title,
-                                Description = @event.Description
-                            }
+                                DataContext = new EventCardViewModel
+                                {
+                                    Title = @event.Title,
+                                    Description = @event.Description
+                                }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        mainGrid.Children.Add(new Label
+                        {
+                            Content = "There are no events yet..."
                         });
                     }
                 }
@@ -54,8 +65,6 @@ namespace Nudel.Client.Views
             };
 
             MainModel.ModelChanged += handler;
-
-            NetworkListener.SendRequest(request);
         }
     }
 }
