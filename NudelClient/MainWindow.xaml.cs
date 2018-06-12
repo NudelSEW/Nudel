@@ -1,4 +1,5 @@
 ﻿using Nudel.Client.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,7 +18,9 @@ namespace Nudel.Client
 #if DEBUG
             NetworkListener.Log += (string data) =>
             {
-                log.AppendText(data);
+                Application.Current.Dispatcher.Invoke(new Action(() => {
+                    log.AppendText(data + "\n");
+                }));
             };
 #else
             logSection.Visibility = Visibility.Collapsed;
