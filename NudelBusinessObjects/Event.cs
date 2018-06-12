@@ -9,7 +9,7 @@ namespace Nudel.BusinessObjects
     public class Event
     {
         [BsonId]
-        public ObjectId ID { get; set; }
+        public string ID { get; set; }
         [BsonElement("title")]
         public string Title { get; set; }
         [BsonElement("descriptions")]

@@ -64,7 +64,7 @@ namespace Nudel.Backend
             if (results.Count() == 0) {
                 User user = new User
                 {
-                    ID = ObjectId.GenerateNewId(),
+                    ID = Guid.NewGuid().ToString(),
                     Username = username,
                     Email = email,
                     Password = password,
@@ -90,8 +90,10 @@ namespace Nudel.Backend
         /// <returns></returns>
         public string Login(string usernameOrEmail, string password)
         {
-            var collection = db.GetCollection<User>("users");
-            var results = collection.Find(x => x.Username == usernameOrEmail && x.Password == password || x.Email == usernameOrEmail && x.Password == password);
+            var results = userCollection.Find(x =>
+                (x.Username == usernameOrEmail && x.Password == password) ||
+                (x.Email == usernameOrEmail && x.Password == password)
+            );
 
             if (results.Count() > 0)
             {
@@ -117,7 +119,7 @@ namespace Nudel.Backend
         {
             CheckSessionTokenProvided();
 
-            @event.ID = ObjectId.GenerateNewId();
+            @event.ID = Guid.NewGuid().ToString();
             @event.Owner = user;
 
             eventCollection.InsertOne(@event);
@@ -127,7 +129,7 @@ namespace Nudel.Backend
 
         public void DeleteEvent(Event @event) => throw new NotImplementedException();
 
-        public Event FindEvent(ObjectId id)
+        public Event FindEvent(string id)
         {
             CheckSessionTokenProvided();
 
@@ -197,7 +199,7 @@ namespace Nudel.Backend
             return userCollection.Find(x => x.ID == user.ID).FirstOrDefault();
         }
 
-        public User FindUser(ObjectId id)
+        public User FindUserById(string id)
         {
             CheckSessionTokenProvided();
 

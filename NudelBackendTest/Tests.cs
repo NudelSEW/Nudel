@@ -27,7 +27,7 @@ namespace NudelBackendTest
 
             User testUser = new User
             {
-                ID = ObjectId.GenerateNewId(),
+                ID = Guid.NewGuid().ToString(),
                 Username = "TestUser",
                 SessionToken = sessionToken
             };
@@ -45,7 +45,7 @@ namespace NudelBackendTest
         {
             NudelService nudel = new NudelService();
 
-            nudel.Register("chris", "chris@chris.com", "chris", "chris", "chris");
+            nudel.Register("chris", "chris@chris.com", "hallo123", "Christoph", "Pader-Barosch");
 
             DeleteTestUser();
         }
@@ -112,7 +112,7 @@ namespace NudelBackendTest
         {
             NudelService nudel = new NudelService(sessionToken);
 
-            nudel.FindUser(ObjectId.Parse("1"));
+            nudel.FindUser("TestUser");
 
             DeleteTestUser();
         }
