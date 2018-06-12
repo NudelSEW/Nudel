@@ -70,14 +70,17 @@ namespace JustConnect.Tcp
 
                 socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, socket);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                socket = null;
-                IsConnected = false;
+                if (e is SocketException || e is ObjectDisposedException)
+                {
+                    socket = null;
+                    IsConnected = false;
 
-                Log?.Invoke("Client disconnected");
+                    Log?.Invoke("Client disconnected");
 
-                return;
+                    return;
+                }
             }
         }
         public void Send(String data)
