@@ -34,13 +34,15 @@ namespace NudelBackendTest
 
             userCollection.InsertOne(testUser);
         }
-
+        [TestMethod]
+        // Tests the if deleting works as intendend
         private void DeleteTestUser()
         {
             userCollection.DeleteMany(x => x.SessionToken == "testToken");
         }
 
-        [TestMethod]
+       [TestMethod]
+       // Testing the register_function through nudelService
        public void Should_Register()
         {
             NudelService nudel = new NudelService();
@@ -51,6 +53,7 @@ namespace NudelBackendTest
         }
 
         [TestMethod]
+        // using different parameters in the login function for testing
         public void Should_Login()
         {
             NudelService nudel = new NudelService();
