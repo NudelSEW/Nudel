@@ -5,34 +5,84 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Nudel.Client.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d">
-    <Grid Margin="10">
+             mc:Ignorable="d"
+             Loaded="RegisterView_Loaded">
+    <Grid Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Center">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
-            <!--<ColumnDefinition Width="*" />-->
+            <ColumnDefinition Width="*"  />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <TextBlock
             Grid.Row="0"
+            Grid.ColumnSpan="2"
             Text="Register"
             HorizontalAlignment="Center"
             Style="{StaticResource MaterialDesignTitleTextBlock}" />
 
         <TextBox
+            Name="firstName"
             Grid.Row="1"
-            materialDesign:HintAssist.Hint="Email"
+            Grid.Column="0"
+            Margin="0 10 10 0"
+            materialDesign:HintAssist.Hint="First Name"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-        <PasswordBox
+
+        <TextBox
+            Name="lastName"
+            Grid.Row="1"
+            Grid.Column="1"
             Margin="0 10 0 0"
+            materialDesign:HintAssist.Hint="Last Name"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+        <TextBox
+            Name="username"
             Grid.Row="2"
+            Grid.Column="0"
+            Margin="0 10 10 0"
+            materialDesign:HintAssist.Hint="Username"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+        <PasswordBox
+            Name="password"
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="0 10 0 0"
             materialDesign:HintAssist.Hint="Password"
             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
-        <Button Margin="0 10 0 0" Grid.Row="3" Content="Login" />
+
+        <TextBox
+            Name="email"
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Margin="0 10 0 0"
+            materialDesign:HintAssist.Hint="Email"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+
+        <Button
+            Name="register"
+            Grid.Row="4"
+            Grid.ColumnSpan="2"
+            Margin="0 10 0 0"
+            Content="Register"
+            IsDefault="True"
+            Click="Register" />
+
+        <TextBlock
+            Name="login"
+            Grid.Row="5"
+            Margin="0 10 0 0"
+            HorizontalAlignment="Center">
+            <Hyperlink Click="Login">Already have an account? Login</Hyperlink>
+        </TextBlock>
     </Grid>
 </UserControl>
