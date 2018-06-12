@@ -1,4 +1,5 @@
-﻿using Nudel.Client.ViewModels;
+﻿using Nudel.Client.Model;
+using Nudel.Client.ViewModels;
 using Nudel.Networking.Requests;
 using System;
 using System.Windows;
@@ -44,7 +45,12 @@ namespace Nudel.Client.Views
 
             MainModel.ModelChanged += handler;
 
-            NetworkListener.SendRequest(request);   
+            NetworkListener.SendRequest(request);
+        }
+
+        private void Register(object sender, RoutedEventArgs e)
+        {
+            MainViewModel.CurrentView = new RegisterView();
         }
     }
 }
