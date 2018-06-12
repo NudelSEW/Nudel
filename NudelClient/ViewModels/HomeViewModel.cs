@@ -19,6 +19,20 @@ namespace Nudel.Client.ViewModels
             }
         }
 
+        private string displayName;
+        public string DisplayName
+        {
+            get
+            {
+                return displayName;
+            }
+            set
+            {
+                displayName = value;
+                NotifyPropertyChanged("DisplayName");
+            }
+        }
+
         public HomeViewModel()
         {
             CurrentView = new EventView();
