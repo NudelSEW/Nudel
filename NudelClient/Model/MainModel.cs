@@ -1,9 +1,10 @@
 ﻿using Nudel.BusinessObjects;
 using System;
+using System.Windows;
 
-namespace Nudel.Client
+namespace Nudel.Client.Model
 {
-    public delegate void ModelChangedHandler(string fieldName, Object field);
+    public delegate void ModelChangedHandler(string fieldName, object field);
 
     public class MainModel
     {
@@ -17,7 +18,8 @@ namespace Nudel.Client
             set
             {
                 sessionToken = value;
-                ModelChanged?.Invoke("SessionToken", sessionToken);
+
+                Invoke("SessionToken", sessionToken);
             }
         }
 
@@ -31,8 +33,15 @@ namespace Nudel.Client
             set
             {
                 user = value;
-                ModelChanged?.Invoke("User", user);
+                Invoke("User", user);
             }
+        }
+
+        private static void Invoke(string fieldName, object field)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => {
+                ModelChanged?.Invoke(fieldName, field);
+            }));
         }
 
         public static event ModelChangedHandler ModelChanged;
