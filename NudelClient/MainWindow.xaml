@@ -31,7 +31,7 @@
         <Border Name="logSection" Grid.Row="1" Padding="10" Background="#EEEEEE">
             <StackPanel Orientation="Vertical">
                 <Label FontWeight="Bold">Log</Label>
-                <TextBox Name="log" IsReadOnly="True" MinLines="3" />
+                <TextBox Name="log" IsReadOnly="True" MinLines="3" MaxLines="3" />
             </StackPanel>
         </Border>
     </Grid>
