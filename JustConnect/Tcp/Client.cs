@@ -9,6 +9,9 @@ namespace JustConnect.Tcp
     public delegate void ClientLogHandler(string data);
     public delegate void ClientReceivedHandler(string data);
 
+    /// <summary>
+    // client is accomplishing the actions for the user (connecting, disconnecting and sending or receiving of elements)
+    /// </summary>
     public class Client
     {
         private const int BUFFER_SIZE = 2048;
@@ -26,7 +29,10 @@ namespace JustConnect.Tcp
         {
             Port = port;
         }
-
+        /// <summary>
+        /// connecting to nudel server with ip address. checking if connected and returning a message
+        /// </summary>
+        /// <param name="ip"></param>
         public void Connect(IPAddress ip)
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
