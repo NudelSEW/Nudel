@@ -12,6 +12,14 @@ namespace Nudel.Networking.Requests
 
         public RegisterRequest() : base() { }
 
+        /// <summary>
+        /// setting parameters equal to base method of request
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
         public RegisterRequest(string username, string email, string password, string firstName, string lastName) : base()
         {
 

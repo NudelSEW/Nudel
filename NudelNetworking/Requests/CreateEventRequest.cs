@@ -15,6 +15,15 @@ namespace Nudel.Networking.Requests
 
         public CreateEventRequest() { }
 
+        /// <summary>
+        ///  using the entered parameters to create a request 
+        /// </summary>
+        /// <param name="sessionToken"></param>
+        /// <param name="title"></param>
+        /// <param name="description"></param>
+        /// <param name="time"></param>
+        /// <param name="location"></param>
+        /// <param name="options"></param>
         public CreateEventRequest(
             string sessionToken,
             string title,
