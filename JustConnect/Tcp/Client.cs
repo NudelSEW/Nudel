@@ -51,6 +51,9 @@ namespace JustConnect.Tcp
                 Log?.Invoke("Client already connected");
             }
         }
+        /// <summary>
+        /// closing the connection of the socket and return client disconnecting
+        /// </summary>
         public void Disconnect()
         {
             socket.Disconnect(false);
@@ -60,6 +63,11 @@ namespace JustConnect.Tcp
 
             Log?.Invoke("Client disconnected");
         }
+
+        /// <summary>
+        /// trying if the message was received and returning message if not
+        /// </summary>
+        /// <param name="AR"></param>
         private void Receive(IAsyncResult AR)
         {
             Socket serverSocket = (Socket)AR.AsyncState;
@@ -89,6 +97,10 @@ namespace JustConnect.Tcp
                 }
             }
         }
+        /// <summary>
+        /// sending encoded message via TCP
+        /// </summary>
+        /// <param name="data"></param>
         public void Send(String data)
         {
             new Thread(() =>
