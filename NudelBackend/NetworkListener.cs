@@ -1,10 +1,6 @@
 ﻿using JustConnect.Tcp;
 using Newtonsoft.Json;
-using Nudel.BusinessObjects;
-using Nudel.Networking.Requests;
-using Nudel.Networking.Requests.Base;
-using Nudel.Networking.Responses;
-using Nudel.Networking.Responses.Base;
+using Nudel.Networking;
 using System;
 using System.Net.Sockets;
 
@@ -61,13 +57,16 @@ namespace Nudel.Backend
         }
 
         /// <summary>
-        /// sending a message respone via socket communication
+        /// sending a message response via socket communication
         /// </summary>
-        /// <param name="response"> variable responsable for the response </param>
+        /// <param name="type"> type of the response </param>
+        /// <param name="result"> result data being sent to with the response </param>
         /// <param name="clientSocket"> the Client Socket </param>
-        public void SendResponse(Response response, Socket clientSocket)
+        public void SendResponse(RequestResponseType type, Result result, Socket clientSocket)
         {
+            Response response = new Response { Type = type, Result = result };
             string responseString = JsonConvert.SerializeObject(response, jsonSettings);
+
             server.Send(responseString, clientSocket);
         }
 
@@ -78,60 +77,141 @@ namespace Nudel.Backend
         /// <param name="clientSocket"> the client socket  </param>
         private void ProcessRequest(string data, Socket clientSocket)
         {
-            object rawRequest = JsonConvert.DeserializeObject<object>(data, jsonSettings);
+            Request request = JsonConvert.DeserializeObject<Request>(data, jsonSettings);
 
-            Log($"Received Request of Type: {rawRequest.GetType()}");
-
-            if (rawRequest is RegisterRequest)
+            if (request != null)
             {
-                RegisterRequest request = rawRequest as RegisterRequest;
+                Log($"Received Response of Type: {request.Type}");
 
-                NudelService nudel = new NudelService();
+                RequestResponseType type = request.Type;
+                Result result;
 
-                string sessionToken = nudel.Register(
-                    request.Username,
-                    request.Email,
-                    request.Password,
-                    request.FirstName,
-                    request.LastName
-                );
-
-                SendResponse(new LoginRegisterResponse(sessionToken), clientSocket);
-            }
-            else if (rawRequest is LoginRequest)
-            {
-                LoginRequest request = rawRequest as LoginRequest;
-
-                NudelService nudel = new NudelService();
-
-                string sessionToken = nudel.Login(request.UsernameOrEmail, request.Password);
-
-                SendResponse(new LoginRegisterResponse(sessionToken), clientSocket);
-            }
-            else if (rawRequest is CreateEventRequest)
-            {
-                CreateEventRequest request = rawRequest as CreateEventRequest;
-
-                NudelService nudel = new NudelService(request.SessionToken);
-
-                Event @event = new Event
+                if (type == RequestResponseType.Register)
                 {
-                    Title = request.Title,
-                    Description = request.Description,
-                    Time = request.Time,
-                    Location = request.Location,
-                    Options = request.Options
-                };
+                    nudel = new NudelService();
 
-                nudel.CreateEvent(@event);
-            }
-            else if (rawRequest is GetUserRequest)
-            {
-                GetUserRequest request = rawRequest as GetUserRequest;
+                    result = nudel.Register(request.User);
 
-                NudelService nudel = new NudelService(request.SessionToken);
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.Login)
+                {
+                    nudel = new NudelService();
 
-                SendResponse(new GetUserResponse(nudel.GetUser()), clientSocket);
+                    result = nudel.Login(request.User);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.Logout)
+                {
+                    result = nudel.Logout(request.SessionToken);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.CreateEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.CreateEvent(request.Event);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.EditEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.EditEvent(request.Event);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.DeleteEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.DeleteEvent(request.Event);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.FindEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.FindEvent(request.Event.ID);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.InviteToEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.InviteToEvent(request.Event, request.User);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.AcceptEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.AcceptEvent(request.Event);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.LeaveEvent)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.CreateEvent(request.Event);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.AddComment)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.AddComment(request.Event, request.Comment);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.DeleteComment)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.DeleteComment(request.Event, request.Comment);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.FindCurrentUser)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.FindCurrentUser();
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.FindUser)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.FindUser(request.User.ID);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.EditUser)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.EditUser(request.User);
+
+                    SendResponse(type, result, clientSocket);
+                }
+                else if (type == RequestResponseType.DeleteUser)
+                {
+                    nudel = new NudelService(request.SessionToken);
+
+                    result = nudel.DeleteUser(request.User);
+
+                    SendResponse(type, result, clientSocket);
+                }
             }
         }
     }

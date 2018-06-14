@@ -1,9 +1,7 @@
 ﻿using JustConnect.Tcp;
 using Newtonsoft.Json;
 using Nudel.Client.Model;
-using Nudel.Networking.Requests.Base;
-using Nudel.Networking.Responses;
-using Nudel.Networking.Responses.Base;
+using Nudel.Networking;
 using System;
 using System.Net;
 using TcpClient = JustConnect.Tcp.Client;
@@ -80,21 +78,63 @@ namespace Nudel.Client
         /// <param name="data">sensible data for the functionality of the application</param>
         public static void ProcessResponse(string data)
         {
-            object rawResponse = JsonConvert.DeserializeObject<object>(data, jsonSettings);
+            Response response = JsonConvert.DeserializeObject<Response>(data, jsonSettings);
 
-            Log?.Invoke($"Received Response of Type: {rawResponse.GetType()}");
-
-            if (rawResponse is LoginRegisterResponse)
+            if (response != null)
             {
-                LoginRegisterResponse response = rawResponse as LoginRegisterResponse;
+                Log?.Invoke($"Received Response of Type: {response.Type}");
 
-                MainModel.SessionToken = response.SessionToken;
-            }
-            else if (rawResponse is GetUserResponse)
-            {
-                GetUserResponse response = rawResponse as GetUserResponse;
+                RequestResponseType type = response.Type;
+                Result result;
 
-                MainModel.User = response.User;
+                if (type == RequestResponseType.Register ||
+                    type == RequestResponseType.Login)
+                {
+                    MainModel.SessionToken = response.Result.SessionToken;
+                }
+                else if (type == RequestResponseType.Logout)
+                {
+                }
+                else if (type == RequestResponseType.CreateEvent)
+                {
+                }
+                else if (type == RequestResponseType.EditEvent)
+                {
+                }
+                else if (type == RequestResponseType.DeleteEvent)
+                {
+                }
+                else if (type == RequestResponseType.FindEvent)
+                {
+                }
+                else if (type == RequestResponseType.InviteToEvent)
+                {
+                }
+                else if (type == RequestResponseType.AcceptEvent)
+                {
+                }
+                else if (type == RequestResponseType.LeaveEvent)
+                {
+                }
+                else if (type == RequestResponseType.AddComment)
+                {
+                }
+                else if (type == RequestResponseType.DeleteComment)
+                {
+                }
+                else if (type == RequestResponseType.FindCurrentUser)
+                {
+                    MainModel.User = response.Result.FoundUser;
+                }
+                else if (type == RequestResponseType.FindUser)
+                {
+                }
+                else if (type == RequestResponseType.EditUser)
+                {
+                }
+                else if (type == RequestResponseType.DeleteUser)
+                {
+                }
             }
         }
     }
