@@ -10,6 +10,9 @@ using System.Net.Sockets;
 
 namespace Nudel.Backend
 {
+    /// <summary>
+    /// the networking component of the nudelService, used for every kind of communication
+    /// </summary>
     public class NetworkListener
     {
         private const int PORT = 8181;
@@ -17,6 +20,9 @@ namespace Nudel.Backend
         private NudelService nudel;
         private readonly JsonSerializerSettings jsonSettings;
 
+        /// <summary>
+        ///  constructor for instantiating a server object und jsonSettings
+        /// </summary>
         public NetworkListener()
         {
             server = new Server(PORT);
@@ -29,27 +35,47 @@ namespace Nudel.Backend
             server.Received += ProcessRequest;
         }
 
+        /// <summary>
+        /// starting the server
+        /// </summary>
         public void Start()
         {
             server.Start();
         }
 
+        /// <summary>
+        /// stoping the server
+        /// </summary>
         public void Stop()
         {
             server.Stop();
         }
 
+        /// <summary>
+        /// writing a string message on the console
+        /// </summary>
+        /// <param name="data"></param>
         public void Log(string data)
         {
             Console.WriteLine(data);
         }
 
+        /// <summary>
+        /// sending a message respone via socket communication
+        /// </summary>
+        /// <param name="response"> variable responsable for the response </param>
+        /// <param name="clientSocket"> the Client Socket </param>
         public void SendResponse(Response response, Socket clientSocket)
         {
             string responseString = JsonConvert.SerializeObject(response, jsonSettings);
             server.Send(responseString, clientSocket);
         }
 
+        /// <summary>
+        /// receiving and converting a request via json and sending a response
+        /// </summary>
+        /// <param name="data"> a string with sensible data about the application </param>
+        /// <param name="clientSocket"> the client socket  </param>
         private void ProcessRequest(string data, Socket clientSocket)
         {
             object rawRequest = JsonConvert.DeserializeObject<object>(data, jsonSettings);
