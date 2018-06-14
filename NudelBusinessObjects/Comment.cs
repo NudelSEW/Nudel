@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NudelBusinessObjects
+namespace Nudel.BusinessObjects
 {
     public class Comment
     {
