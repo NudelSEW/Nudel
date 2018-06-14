@@ -32,7 +32,7 @@ namespace JustConnect.Tcp
         /// <summary>
         /// connecting to nudel server with ip address. checking if connected and returning a message
         /// </summary>
-        /// <param name="ip"></param>
+        /// <param name="ip"> ipaddress of the program</param>
         public void Connect(IPAddress ip)
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
