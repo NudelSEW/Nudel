@@ -80,6 +80,7 @@
         <TextBlock
             Name="login"
             Grid.Row="5"
+            Grid.ColumnSpan="2"
             Margin="0 10 0 0"
             HorizontalAlignment="Center">
             <Hyperlink Click="Login">Already have an account? Login</Hyperlink>
