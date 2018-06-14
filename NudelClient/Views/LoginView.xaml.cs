@@ -1,6 +1,7 @@
-﻿using Nudel.Client.Model;
+﻿using Nudel.BusinessObjects;
+using Nudel.Client.Model;
 using Nudel.Client.ViewModels;
-using Nudel.Networking.Requests;
+using Nudel.Networking;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,10 +27,15 @@ namespace Nudel.Client.Views
 
         private void Login(object sender, RoutedEventArgs e)
         {
-            LoginRequest request = new LoginRequest
+            Request request = new Request
             {
-                UsernameOrEmail = usernameOrEmail.Text,
-                Password = password.Password
+                Type = RequestResponseType.Login,
+                User = new User
+                {
+                    Username = usernameOrEmail.Text,
+                    Email = usernameOrEmail.Text,
+                    Password = password.Password
+                }
             };
 
             ModelChangedHandler handler = null;
