@@ -1,15 +1,13 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using Nudel.BusinessObjects;
-using NudelBusinessObjects;
+using Nudel.Networking;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Nudel.Backend
 {
     /// <summary>
-    /// The NudelService class contains all major functionality to interact with the database. 
+    /// The NudelService class contains all major functionality to interact with the database.
     /// With it you can create, delete and query for Events and Users.
     /// </summary>
     public class NudelService
@@ -57,29 +55,24 @@ namespace Nudel.Backend
         /// <param name="firstName">First Name of the new User</param>
         /// <param name="lastName">LastName of the new User</param>
         /// <returns></returns>
-        public string Register(string username, string email, string password, string firstName, string lastName)
+        public Result Register(User user)
         {
-            var results = userCollection.Find(x => x.Username == username || x.Email == email);
+            var results = userCollection.Find(x => x.Username == user.Username || x.Email == user.Email);
 
             if (results.Count() == 0) {
-                User user = new User
-                {
-                    ID = Guid.NewGuid().ToString(),
-                    Username = username,
-                    Email = email,
-                    Password = password,
-                    FirstName = firstName,
-                    LastName = lastName
-                };
+
+                user.ID = Guid.NewGuid().ToString();
 
                 userCollection.InsertOne(user);
 
-                return CreateSessionToken(user);
+                return new Result
+                {
+                    Type = ResultType.Success,
+                    SessionToken = CreateSessionToken(user)
+                };
             }
-            else
-            {
-                return "{error:'passwordInvalid'}";
-            }
+
+            return Result.Error(100, "Invalid User");
         }
 
         /// <summary>
@@ -88,31 +81,36 @@ namespace Nudel.Backend
         /// <param name="usernameOrEmail">Username or Email of the persistent User</param>
         /// <param name="password">Password of the persistent User</param>
         /// <returns></returns>
-        public string Login(string usernameOrEmail, string password)
+        public Result Login(User user)
         {
             var results = userCollection.Find(x =>
-                (x.Username == usernameOrEmail && x.Password == password) ||
-                (x.Email == usernameOrEmail && x.Password == password)
+                (x.Username == user.Username && x.Password == user.Password) ||
+                (x.Email == user.Email && x.Password == user.Password)
             );
 
             if (results.Count() > 0)
             {
-                return CreateSessionToken(results.FirstOrDefault());
+                return new Result {
+                    Type = ResultType.Success,
+                    SessionToken = CreateSessionToken(results.FirstOrDefault())
+                };
             }
 
-            return "{error:'passwordInvalid'";
+            return Result.Error(100, "Invalid User");
         }
 
         /// <summary>
         /// updating the userCollection of the database to end the session and log out the user
         /// </summary>
         /// <param name="sessionToken"> individual session token for every session </param>
-        public void Logout(string sessionToken)
+        public Result Logout(string sessionToken)
         {
             userCollection.UpdateOne(
                 x => x.SessionToken == sessionToken,
                 Builders<User>.Update.Set(x => x.SessionToken, "")
             );
+
+            return Result.Success();
         }
 
         #endregion
@@ -123,45 +121,99 @@ namespace Nudel.Backend
         /// creating an event via id, owner and inserting the event into the database
         /// </summary>
         /// <param name="event"></param>
-        public void CreateEvent(Event @event)
+        /// </summary>
+        /// <param name="event">Event to be created</param>
+        public Result CreateEvent(Event @event)
         {
-            CheckSessionTokenProvided();
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
 
             @event.ID = Guid.NewGuid().ToString();
             @event.Owner = user;
 
             eventCollection.InsertOne(@event);
+
+            return Result.Success();
         }
 
         /// <summary>
-        /// throws NotImplementedException
+        /// Edits a event
         /// </summary>
-        /// <param name="newEvent">the new event attributes </param>
-        public void EditEvent(Event newEvent) => throw new NotImplementedException();
+        /// <param name="newEvent">Event to be edited</param>
+        public Result EditEvent(Event newEvent)
+        {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
+            var foundEvents = eventCollection.Find(x => x.ID == newEvent.ID);
+
+            if (foundEvents.Count() != 1)
+            {
+                return Result.Error(100, "Invalid event: Event doesn't exist");
+            }
+
+            Event oldEvent = foundEvents.FirstOrDefault();
+
+            if (oldEvent.Owner != user)
+            {
+                return Result.Error(500, "User is not owner of event");
+            }
+
+            eventCollection.ReplaceOne(x => x.ID == oldEvent.ID, newEvent);
+
+            return Result.Success();
+        }
 
         /// <summary>
-        /// throws NotImplementedException
+        /// Deletes a event
         /// </summary>
         /// <param name="event"> the event that should be deleted </param>
-        public void DeleteEvent(Event @event) => throw new NotImplementedException();
+        public Result DeleteEvent(Event @event)
+        {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
+            var foundEvents = eventCollection.Find(x => x.ID == @event.ID);
+
+            if (foundEvents.Count() != 1)
+            {
+                return Result.Error(100, "Invalid event: Event doesn't exist");
+            }
+
+            Event foundEvent = foundEvents.FirstOrDefault();
+
+            if (foundEvent.Owner != user)
+            {
+                return Result.Error(500, "User is not owner of event");
+            }
+
+            eventCollection.DeleteOne(x => x.ID == foundEvent.ID);
+
+            return Result.Success();
+        }
 
         /// <summary>
         /// searching the event in the collection of the database
         /// </summary>
-        /// <param name="id"> session id of the event </param>
+        /// <param name="id"> id of the event </param>
         /// <returns> returns either the found event or null </returns>
-        public Event FindEvent(string id)
+        public Result FindEvent(string id)
         {
-            CheckSessionTokenProvided();
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
 
-            var result = eventCollection.Find(x => x.ID == id);
+            var foundEvents = eventCollection.Find(x => x.ID == id);
 
-            if (result.Count() != 1)
+            if (foundEvents.Count() != 1)
             {
-                return null;
+                return Result.Error(200, "Event not found");
             }
 
-            return result.FirstOrDefault();
+            return new Result
+            {
+                Type = ResultType.Success,
+                FoundEvent = foundEvents.FirstOrDefault()
+            };
         }
 
         /// <summary>
@@ -169,17 +221,23 @@ namespace Nudel.Backend
         /// </summary>
         /// <param name="title"> the title of the events </param>
         /// <returns> returns either a list of events or null </returns>
-        public List<Event> FindEvents(string title)
+        public Result FindEvents(string title)
         {
-            CheckSessionTokenProvided();
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
 
-            var result = eventCollection.Find(x => x.Title == title);
+            var foundEvents = eventCollection.Find(x => x.Title == title);
 
-            if (result.Count() == 0)
+            if (foundEvents.Count() == 0)
             {
-                return null;
+                return Result.Error(200, "Event not found");
             }
-            return result.ToList();
+
+            return new Result
+            {
+                Type = ResultType.Success,
+                FoundEvents = foundEvents.ToList()
+            };
         }
 
         /// <summary>
@@ -187,19 +245,27 @@ namespace Nudel.Backend
         /// </summary>
         /// <param name="event"> the new event for the user </param>
         /// <param name="user"> the new user </param>
-        public void InviteToEvent(Event @event, User user)
+        public Result InviteToEvent(Event @event, User user)
         {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
             user.Invitations.Add(@event);
 
             userCollection.ReplaceOne(x => x.ID == user.ID, user);
+
+            return Result.Success();
         }
 
         /// <summary>
         /// compares user and event id if its equal, if not invitation is sent
         /// </summary>
         /// <param name="event"> the event for the invitation </param>
-        public void AcceptEvent(Event @event)
+        public Result AcceptEvent(Event @event)
         {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
             if (user.Invitations.Any(x => x.ID == @event.ID))
             {
                 user.Invitations.Remove(@event);
@@ -207,36 +273,72 @@ namespace Nudel.Backend
 
                 userCollection.ReplaceOne(x => x.ID == user.ID, user);
             }
-        }
 
+            return Result.Success();
+        }
 
         /// <summary>
         /// compares if a user does participate in this event, if true then he gets removed
         /// </summary>
         /// <param name="event"></param>
-        public void LeaveEvent(Event @event)
+        public Result LeaveEvent(Event @event)
         {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
             if (user.JoinedEvents.Any(x => x.ID == @event.ID))
             {
                 user.JoinedEvents.Remove(@event);
 
                 userCollection.ReplaceOne(x => x.ID == user.ID, user);
             }
+
+            return Result.Success();
         }
 
         /// <summary>
-        /// throws NotImplementedException
+        /// Adds a comment to a event
         /// </summary>
-        /// <param name="event"></param>
-        /// <param name="comment"></param>
-        public void AddComment(Event @event, Comment comment) => throw new NotImplementedException();
+        /// <param name="event"> event, the comment should be added to</param>
+        /// <param name="comment">comment, that should be added</param>
+        public Result AddComment(Event @event, Comment comment)
+        {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
+            if (!@event.Members.Any(x => x == user))
+            {
+                return Result.Error(500, "User is not member of event");
+            }
+
+            @event.Comments.Add(comment);
+
+            eventCollection.ReplaceOne(x => x.ID == @event.ID, @event);
+
+            return Result.Success();
+        }
 
         /// <summary>
-        /// throws NotImplementedException
+        /// Deletes a comment to a event
         /// </summary>
-        /// <param name="event"></param>
-        /// <param name="comment"></param>
-        public void DeleteComment(Event @event, Comment comment) => throw new NotImplementedException();
+        /// <param name="event"> event, the comment should be deleted from</param>
+        /// <param name="comment">comment, that should be deleted</param>
+        public Result DeleteComment(Event @event, Comment comment)
+        {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
+            if (@event.Owner != user)
+            {
+                return Result.Error(500, "User is not owner of event");
+            }
+
+            @event.Comments.Remove(comment);
+
+            eventCollection.ReplaceOne(x => x.ID == @event.ID, @event);
+
+            return Result.Success();
+        }
 
         #endregion
 
@@ -246,11 +348,16 @@ namespace Nudel.Backend
         /// searches in userCollection of the database and returns the user
         /// </summary>
         /// <returns> returns the existing user </returns>
-        public User GetUser()
+        public Result FindCurrentUser()
         {
-            CheckSessionTokenProvided();
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
 
-            return userCollection.Find(x => x.ID == user.ID).FirstOrDefault();
+            return new Result
+            {
+                Type = ResultType.Success,
+                FoundUser = userCollection.Find(x => x.ID == user.ID).FirstOrDefault()
+            };
         }
 
         /// <summary>
@@ -258,11 +365,23 @@ namespace Nudel.Backend
         /// </summary>
         /// <param name="id"> the string id of user </param>
         /// <returns> returns the first matching user </returns>
-        public User FindUserById(string id)
+        public Result FindUserById(string id)
         {
-            CheckSessionTokenProvided();
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
 
-            return userCollection.Find(x => x.ID == id).FirstOrDefault();
+            User foundUser = userCollection.Find(x => x.ID == id).FirstOrDefault();
+
+            if (foundUser != null)
+            {
+                return Result.Error(300, "User not found");
+            }
+
+            return new Result
+            {
+                Type = ResultType.Success,
+                FoundUser = userCollection.Find(x => x.ID == user.ID).FirstOrDefault()
+            };
         }
 
         /// <summary>
@@ -270,54 +389,104 @@ namespace Nudel.Backend
         /// </summary>
         /// <param name="usernameOrEmail"> the corresponding username or email </param>
         /// <returns> returns the first matching user or null </returns>
-        public User FindUser(string usernameOrEmail)
+        public Result FindUser(string usernameOrEmail)
         {
-            CheckSessionTokenProvided();
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
 
-            var result = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
+            var foundUsers = userCollection.Find(x => x.Username == usernameOrEmail || x.Email == usernameOrEmail);
 
-            if (result.Count() != 1)
+            if (foundUsers.Count() != 1)
             {
                 return null;
             }
-            return result.FirstOrDefault();
+
+            return new Result
+            {
+                Type = ResultType.Success,
+                FoundUser = foundUsers.FirstOrDefault()
+            };
         }
 
         /// <summary>
-        /// throws NotImplementedException
+        /// Edits a user
         /// </summary>
-        /// <param name="newUser"></param>
-        public void EditUser(User newUser) => throw new NotImplementedException();
+        /// <param name="newUser"> new user to be changed</param>
+        public Result EditUser(User newUser)
+        {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
+            var foundUsers = userCollection.Find(x => x.ID == newUser.ID);
+
+            if (foundUsers.Count() != 1)
+            {
+                return Result.Error(100, "Invalid user: User doesn't exist");
+            }
+
+            User oldUser = foundUsers.FirstOrDefault();
+
+            if (oldUser != user)
+            {
+                return Result.Error(600, "User is permitted to edit another user");
+            }
+
+            userCollection.ReplaceOne(x => x.ID == oldUser.ID, newUser);
+
+            return Result.Success();
+        }
 
         /// <summary>
-        /// throws NotImplementedException
+        /// Deletes a user
         /// </summary>
-        /// <param name="user"></param>
-        public void DeleteUser(User user) => throw new NotImplementedException();
+        /// <param name="user"> user to be deleted </param>
+        public Result DeleteUser(User user)
+        {
+            Result result = CheckSessionTokenProvided();
+            if (result.Type == ResultType.Error) return result;
+
+            var foundUsers = userCollection.Find(x => x.ID == user.ID);
+
+            if (foundUsers.Count() != 1)
+            {
+                return Result.Error(100, "Invalid user: User doesn't exist");
+            }
+
+            User foundUser = foundUsers.FirstOrDefault();
+
+            if (foundUser != user)
+            {
+                return Result.Error(500, "User is not permitted to delete another user");
+            }
+
+            userCollection.DeleteOne(x => x.ID == user.ID);
+
+            return Result.Success();
+        }
 
         #endregion
 
         #region Utilities
 
         /// <summary>
-        /// creates a random string,uses it to create a sessionToken and updates the userCollection
+        /// creates a random string, uses it to create a sessionToken and updates the userCollection
         /// </summary>
         /// <param name="user"> the matching user  </param>
         /// <returns> returns the generated sessionToken </returns>
         private string CreateSessionToken(User user)
-        {
-            string hash = CreateRandomString(64);
-            string sessionToken = $"{user.Username}-{hash}";
+    {
+        string hash = CreateRandomString(64);
+        string sessionToken = $"{user.Username}-{hash}";
 
-            user.SessionToken = sessionToken;
+        user.SessionToken = sessionToken;
 
-            userCollection.UpdateOne(x => x.ID == user.ID, Builders<User>.Update.Set(x => x.SessionToken, user.SessionToken));
+        userCollection.UpdateOne(x => x.ID == user.ID, Builders<User>.Update.Set(x => x.SessionToken, user.SessionToken));
 
-            return sessionToken;
-        }
+        return sessionToken;
+    }
 
         /// <summary>
-        /// searches for the given sessionToken in the collection 
+        /// searches for the given sessionToken in the collection
         /// </summary>
         /// <param name="sessionToken"> validation needed sessionToken </param>
         /// <returns> returns the first matching value or null </returns>
@@ -332,20 +501,22 @@ namespace Nudel.Backend
 
             return null;
         }
-       
+
         /// <summary>
         /// throws InvalidSessionTokenException if user is null
         /// </summary>
-        private void CheckSessionTokenProvided()
+        private Result CheckSessionTokenProvided()
         {
             if (user == null)
             {
-                throw new InvalidSessionTokenException("The session token provided is not valid");
+                return Result.Error(400, "Invalid Session Token");
             }
+
+            return Result.Success();
         }
 
         /// <summary>
-        /// creates a random object and returns an array of random chars 
+        /// creates a random object and returns an array of random chars
         /// </summary>
         /// <param name="length"> the length of the array </param>
         /// <returns> retuns a new random string </returns>

@@ -85,7 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InvalidSessionTokenException.cs" />
     <Compile Include="NetworkListener.cs" />
     <Compile Include="NudelService.cs" />
     <Compile Include="Program.cs" />
