@@ -7,10 +7,14 @@ using System.Threading;
 
 namespace JustConnect.Tcp
 {
+    
     public delegate void ServerLogHandler(string data);
     public delegate void ServerReceivedHandler(string data, Socket client);
     public delegate void ServerAcceptedHandler(Socket client);
 
+    /// <summary>
+    /// the basic information and functions about the server are defined here
+    /// </summary>
     public class Server
     {
         private const int BACKLOG = 10;
@@ -26,7 +30,15 @@ namespace JustConnect.Tcp
         public event ServerReceivedHandler Received;
         public event ServerAcceptedHandler Accepted;
 
+        /// <summary>
+        /// setting the portnumber in the constructor
+        /// </summary>
         public Server() : this(3131) { }
+
+        /// <summary>
+        /// constructor with one parameter
+        /// </summary>
+        /// <param name="port"> the chosen portnumber </param>
         public Server(int port)
         {
             Port = port;
@@ -34,6 +46,9 @@ namespace JustConnect.Tcp
             clients = new List<Socket>();
         }
 
+        /// <summary>
+        /// starting the server and informing the powershell
+        /// </summary>
         public void Start()
         {
             if (!IsRunning)
@@ -53,6 +68,10 @@ namespace JustConnect.Tcp
                 Log?.Invoke("Server already running");
             }
         }
+
+        /// <summary>
+        /// stoping the server and closing the socket
+        /// </summary>
         public void Stop()
         {
             foreach (Socket client in clients)
@@ -64,6 +83,11 @@ namespace JustConnect.Tcp
             socket.Close();
             IsRunning = false;
         }
+
+        /// <summary>
+        /// accepting a connection with a client
+        /// </summary>
+        /// <param name="AR"> represents the status of an asynchronous operation </param>
         private void Accept(IAsyncResult AR)
         {
             Socket clientSocket;
@@ -86,6 +110,11 @@ namespace JustConnect.Tcp
                 return;
             }
         }
+
+        /// <summary>
+        /// receiving data from a accepted client application
+        /// </summary>
+        /// <param name="AR"> represents the status of an asynchronous operation </param>
         private void Receive(IAsyncResult AR)
         {
             Socket clientSocket = (Socket)AR.AsyncState;
@@ -112,6 +141,12 @@ namespace JustConnect.Tcp
                 return;
             }
         }
+
+        /// <summary>
+        /// instantiating a new thread to send a message
+        /// </summary>
+        /// <param name="data">the message string </param>
+        /// <param name="clientSocket">the receiving socket </param>
         public void Send(string data, Socket clientSocket)
         {
             new Thread(() =>
@@ -121,6 +156,11 @@ namespace JustConnect.Tcp
             }).Start();
 
         }
+
+        /// <summary>
+        /// broadcast message for every connected client
+        /// </summary>
+        /// <param name="data"> the broadcasting message </param>
         public void SendToAll(string data)
         {
             foreach (Socket client in clients)
