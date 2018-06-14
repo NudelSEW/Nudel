@@ -54,5 +54,25 @@ namespace Nudel.Client.Views
 
             MainModel.ModelChanged += handler;
         }
+
+        private void CreateEvent(object sender, RoutedEventArgs e)
+        {
+            //CreateEventRequest request = new CreateEventRequest
+            //{
+            //    Title = "Test",
+            //    Description = "Test",
+            //    Time = new DateTime(),
+            //    Location = new Location(48, 16),
+            //    Options = new List(new DateTime[]
+            //    {
+            //        new DateTime(),
+            //        new DateTime()
+            //    })
+            //};
+
+            //ModelChangedHandler
+
+            //Send
+        }
     }
 }

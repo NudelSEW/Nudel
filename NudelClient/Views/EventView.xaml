@@ -8,6 +8,10 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="500" Loaded="EventView_Loaded">
     <Grid Name="mainGrid">
-        
+        <Button
+            Name="addEvent"
+            Click="CreateEvent">
+            Create Event
+        </Button>
     </Grid>
 </UserControl>
