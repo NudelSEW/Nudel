@@ -5,6 +5,9 @@ using System.Windows.Controls;
 
 namespace Nudel.Client.ViewModels
 {
+    /// <summary>
+    /// contains the current View and changes the value of the changed property if necessary
+    /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
         private UserControl currentView;
@@ -20,6 +23,9 @@ namespace Nudel.Client.ViewModels
             }
         }
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public MainViewModel()
         {
             CurrentView = new LoginView();
@@ -27,6 +33,11 @@ namespace Nudel.Client.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+
+        /// <summary>
+        /// invokes the new property string if it was changed
+        /// </summary>
+        /// <param name="propertyName"></param>
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
