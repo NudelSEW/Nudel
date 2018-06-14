@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 namespace NudelBackendTest
 {
+    /// <summary>
+    /// test cases for NudelBackend
+    /// </summary>
     [TestClass]
     public class Tests
     {
