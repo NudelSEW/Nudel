@@ -18,6 +18,9 @@ namespace NudelBackendTest
         private IMongoCollection<User> userCollection;
         private IMongoCollection<Event> eventCollection;
 
+        /// <summary>
+        /// constructor with used variables
+        /// </summary>
         public Tests()
         {
             mongo = new MongoClient("mongodb://nudel:nudel@docker:27017");
@@ -34,15 +37,20 @@ namespace NudelBackendTest
 
             userCollection.InsertOne(testUser);
         }
+
+        /// <summary>
+        /// test if the delete function works as intented
+        /// </summary>
         [TestMethod]
-        // Tests the if deleting works as intendend
         private void DeleteTestUser()
         {
             userCollection.DeleteMany(x => x.SessionToken == "testToken");
         }
 
-       [TestMethod]
-       // Testing the register_function through nudelService
+        /// <summary>
+        /// Testing the register_function through nudelService 
+        /// </summary>
+        [TestMethod]
        public void Should_Register()
         {
             NudelService nudel = new NudelService();
@@ -51,9 +59,10 @@ namespace NudelBackendTest
 
             DeleteTestUser();
         }
-
+        /// <summary>
+        /// using different parameters in the login function for testing 
+        /// </summary>
         [TestMethod]
-        // using different parameters in the login function for testing
         public void Should_Login()
         {
             NudelService nudel = new NudelService();
@@ -63,7 +72,9 @@ namespace NudelBackendTest
 
             DeleteTestUser();
         }
-
+        /// <summary>
+        /// testing if a new event is created when using those parameters
+        /// </summary>
         [TestMethod]
         public void Should_Create_Event()
         {
@@ -109,7 +120,9 @@ namespace NudelBackendTest
 
             DeleteTestUser();
         }
-
+        /// <summary>
+        ///  instantiating a new nudelService object to test if the user is found
+        /// </summary>
         [TestMethod]
         public void Should_Find_User()
         {
@@ -120,6 +133,9 @@ namespace NudelBackendTest
             DeleteTestUser();
         }
 
+        /// <summary>
+        /// instantiating a new nudelService object to test if an event is found
+        /// </summary>
         [TestMethod]
         public void Should_Find_Events()
         {
@@ -130,6 +146,9 @@ namespace NudelBackendTest
             DeleteTestUser();
         }
 
+        /// <summary>
+        /// instantiating a new nudelService object to test finding users by string values
+        /// </summary>
         [TestMethod]
         public void Should_Find_User_String()
         {

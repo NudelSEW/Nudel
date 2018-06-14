@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Nudel.BusinessObjects
 {
+    /// <summary>
+    /// all information about the user 
+    /// </summary>
     public class User
     {
         [BsonId]
@@ -27,8 +30,19 @@ namespace Nudel.BusinessObjects
         [BsonElement("sessionToken")]
         public string SessionToken { get; set; }
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public User() { }
 
+        /// <summary>
+        /// constructor with username, email, password, firstname, lastname as parameters
+        /// </summary>
+        /// <param name="username"> the chosen username of the user account</param>
+        /// <param name="email"> the unique email address of the user </param>
+        /// <param name="password"> the chosen password for the username </param>
+        /// <param name="firstName"> the persons first name </param>
+        /// <param name="lastName"> the persons last name </param>
         public User(string username, string email, string password, string firstName, string lastName)
         {
             Username = username;
