@@ -35,82 +35,149 @@
 
     <Grid Background="#FFECECEC">
         <Grid.RowDefinitions>
-            <RowDefinition Height="55" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <!-- Topbar -->
-        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#FF3F51B5">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="139*"/>
-                <ColumnDefinition Width="661*"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Text="Nudel Home" HorizontalAlignment="Left" Margin="70,13,0,12" VerticalAlignment="Center" FontSize="22" Foreground="White" Grid.ColumnSpan="2"/>
-            <TextBox materialDesign:HintAssist.Hint="Suche" FontSize="22" TextChanged="TextBox_TextChanged" Grid.Column="1" Margin="213,-7,309,7" Foreground="White" BorderBrush="#89FFFFFF" Text="Search Projekt"/>
-            <materialDesign:PackIcon Kind="Magnify" Margin="357,10,253,8" Foreground="White" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Grid.Column="1" VerticalAlignment="Stretch" RenderTransformOrigin="0.465,-0.37"/>
+
+            <TextBlock
+                Text="Nudel Home"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="22"
+                Foreground="White"
+                Grid.Column="0" />
+
+            <TextBox
+                Grid.Column="1"
+                materialDesign:HintAssist.Hint="Search"
+                FontSize="22"
+                Foreground="White"
+                BorderBrush="#89FFFFFF"
+                VerticalAlignment="Center"
+                Text="Search for events here..." />
+
+            <materialDesign:PackIcon
+                Grid.Column="2"
+                Kind="Magnify"
+                Foreground="White"
+                Width="Auto"
+                Height="Auto"
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"/>
+
             <!-- Right Menu -->
-            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Margin="0,4,0,5">
-                <TextBlock Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontSize="18" Foreground="#FFB8B8B8"></TextBlock>
-                <materialDesign:PopupBox HorizontalAlignment="Right" Margin="10" Foreground="#FFB8B8B8" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
+            <StackPanel
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Grid.Column="3">
+
+                <TextBlock
+                    Text="{Binding Path=DisplayName}"
+                    VerticalAlignment="Center"
+                    FontSize="18"
+                    Foreground="#FFB8B8B8" />
+
+                <materialDesign:PopupBox
+                    HorizontalAlignment="Right"
+                    Margin="10"
+                    Foreground="#FFB8B8B8"
+                    PlacementMode="BottomAndAlignRightEdges"
+                    StaysOpen="False">
+
                     <StackPanel Width="150">
                         <Button Content="Settings"></Button>
                         <Button Content="Help"></Button>
                         <Separator/>
-                        <Button x:Name="ButtonPopUpLogout" Content="Logout" Click="ButtonPopUpLogout_Click"></Button>
+                        <Button
+                            x:Name="logout"
+                            Content="Logout"
+                            Click="Logout" />
                     </StackPanel>
                 </materialDesign:PopupBox>
             </StackPanel>
         </Grid>
 
         <!-- Sidebar -->
-        <Grid x:Name="GridMenu" Grid.RowSpan="2" HorizontalAlignment="Left" Width="55" Background="#FF3F51B5">
-            <StackPanel>
-                <Grid Height="100" Background="#FFF7F7F7">
-                    <!-- ReturnButton -->
-                    <Button x:Name="ButtonCloseMenu" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush ="{x:Null}" Visibility="Collapsed" Click="ButtonCloseMenu_Click">
-                        <materialDesign:PackIcon Foreground="Black" Kind="ArrowLeft" Width="30" Height="30"></materialDesign:PackIcon>
-                    </Button>
-                    <!-- SideMenuButton -->
-                    <Button x:Name="ButtonOpenMenu" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{x:Null}" BorderBrush ="{x:Null}" Click="ButtonOpenMenu_Click">
-                        <materialDesign:PackIcon Foreground="Black" Kind="Menu" Width="30" Height="30"></materialDesign:PackIcon>
-                    </Button>
-                </Grid>
-                <!-- Items for the Menu -->
-                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Height="60" Width="150">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewDashboard" Width="30" Height="30" VerticalAlignment="Center" Foreground="White" Margin="3"></materialDesign:PackIcon>
-                            <TextBlock Text="Home" VerticalAlignment="Center" FontSize="20" Margin="20 10" Foreground="#FFB8B8B8"></TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="60" Width="150">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Calendar" Width="30" Height="30" VerticalAlignment="Center" Foreground="White" Margin="3"></materialDesign:PackIcon>
-                            <TextBlock Text="MyEvents" VerticalAlignment="Center" FontSize="18" Margin="20 10" Foreground="#FFB8B8B8"></TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="60" Width="150">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Settings" Width="30" Height="30" VerticalAlignment="Center" Foreground="White" Margin="3"></materialDesign:PackIcon>
-                            <TextBlock Text="Settings" VerticalAlignment="Center" FontSize="20" Margin="20 10" Foreground="#FFB8B8B8"></TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="60" Width="150">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Logout" Width="30" Height="30" VerticalAlignment="Center" Foreground="White" Margin="5"></materialDesign:PackIcon>
-                            <TextBlock Text="Logout" VerticalAlignment="Center" FontSize="20" Margin="20 10" Foreground="#FFB8B8B8"></TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                </ListView>
-            </StackPanel>
-        </Grid>
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                
+                <ListViewItem Height="50">
+                    <DockPanel HorizontalAlignment="Stretch" Width="Auto">
+                        <materialDesign:PackIcon
+                            DockPanel.Dock="Left"
+                            Kind="ViewDashboard"
+                            Width="Auto"
+                            Height="Auto"
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Margin="3" />
+                        
+                        <TextBlock
+                            DockPanel.Dock="Top"
+                            Text="Home"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            FontSize="20" Foreground="#FFB8B8B8"></TextBlock>
+                    </DockPanel>
+                </ListViewItem>
 
+                <ListViewItem Height="50">
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <materialDesign:PackIcon
+                            Kind="Calendar"
+                            Width="Auto"
+                            Height="Auto"
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Margin="3" />
+
+                        <TextBlock
+                            Text="Events"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            FontSize="20" Foreground="#FFB8B8B8"></TextBlock>
+                    </DockPanel>
+                </ListViewItem>
+
+                <ListViewItem Height="50">
+                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Kind="Account"
+                            Width="Auto"
+                            Height="Auto"
+                            VerticalAlignment="Center"
+                            Foreground="White"
+                            Margin="3" />
+
+                        <TextBlock
+                            Text="Me"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            FontSize="20" Foreground="#FFB8B8B8"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+            </ListView>
+        </StackPanel>
+
+        <!-- Content -->
         <Grid Grid.Row="1" Grid.Column="1" Margin="55 0 0 0">
             <ContentPresenter Content="{Binding Path=CurrentView}" />
         </Grid>

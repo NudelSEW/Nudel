@@ -1,21 +1,10 @@
 ﻿using Nudel.BusinessObjects;
 using Nudel.Client.Model;
 using Nudel.Client.ViewModels;
-using Nudel.Networking.Requests;
+using Nudel.Networking;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Nudel.Client.Views
@@ -25,16 +14,24 @@ namespace Nudel.Client.Views
     /// </summary>
     public partial class HomeView : UserControl
     {
+        public MainViewModel MainViewModel { get; set; }
+
         public HomeView()
         {
             InitializeComponent();
             DataContext = new HomeViewModel();
+
+            MainViewModel = (MainViewModel)Window.GetWindow(this).DataContext;
         }
 
         private void HomeView_Loaded(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
-                GetUserRequest request = new GetUserRequest(MainModel.SessionToken);
+                Request request = new Request
+                {
+                    Type = RequestResponseType.FindCurrentUser,
+                    SessionToken = MainModel.SessionToken
+                };
                 NetworkListener.SendRequest(request);
             }));
 
@@ -55,29 +52,20 @@ namespace Nudel.Client.Views
         }
 
 
-        private void ButtonPopUpLogout_Click(object sender, RoutedEventArgs e)
+        private void Logout(object sender, RoutedEventArgs e)
         {
-            NetworkListener.Stop();
-            Environment.Exit(0);
-        }
+            Request request = new Request
+            {
+                Type = RequestResponseType.Logout,
+                SessionToken = MainModel.SessionToken
+            };
 
-        private void ButtonOpenMenu_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonOpenMenu.Visibility = Visibility.Collapsed;
-            ButtonCloseMenu.Visibility = Visibility.Visible;
+            MainModel.User = null;
+            MainModel.SessionToken = null;
 
-        }
+            NetworkListener.SendRequest(request);
 
-        private void ButtonCloseMenu_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonOpenMenu.Visibility = Visibility.Visible;
-            ButtonCloseMenu.Visibility = Visibility.Collapsed;
-
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
+            MainViewModel.CurrentView = new LoginView();
         }
     }
 }
