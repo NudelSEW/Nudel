@@ -2,6 +2,9 @@
 
 namespace Nudel.Networking.Responses
 {
+    /// <summary>
+    /// has two constructors for delivering a login response
+    /// </summary>
     public class LoginRegisterResponse : Response
     {
         public string SessionToken;
