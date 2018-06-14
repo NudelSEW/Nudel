@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Nudel.Backend;
 using Nudel.BusinessObjects;
+using Nudel.Networking;
 using System;
 using System.Collections.Generic;
 
@@ -51,27 +52,34 @@ namespace NudelBackendTest
         }
 
         /// <summary>
-        /// Testing the register_function through nudelService 
+        /// Testing the register_function through nudelService
         /// </summary>
         [TestMethod]
        public void Should_Register()
         {
             NudelService nudel = new NudelService();
-
-            nudel.Register("chris", "chris@chris.com", "hallo123", "Christoph", "Pader-Barosch");
+            Result result = nudel.Register(new User
+            {
+                Username = "chris",
+                Password = "hallo123",
+                Email = "chris@chris.com",
+                FirstName = "Christoph",
+                LastName = "Pader-Barosch"
+            });
 
             DeleteTestUser();
         }
         /// <summary>
-        /// using different parameters in the login function for testing 
+        /// using different parameters in the login function for testing
         /// </summary>
         [TestMethod]
         public void Should_Login()
         {
             NudelService nudel = new NudelService();
 
-            nudel.Login("testuser", "test123");
-            nudel.Login("test2@test.at", "test1234");
+            Result result = nudel.Login(new User { Username = "chris", Password = "hallo123" });
+
+            Assert.AreEqual(result.Type, ResultType.Success);
 
             DeleteTestUser();
         }

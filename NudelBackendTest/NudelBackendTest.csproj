@@ -83,6 +83,10 @@
       <Project>{7B35E02F-7AD7-4CDD-8C37-A9FCC4BE4386}</Project>
       <Name>NudelBusinessObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NudelNetworking\NudelNetworking.csproj">
+      <Project>{0DF5A56B-3E63-4FF7-8408-0FAD86170A0B}</Project>
+      <Name>NudelNetworking</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
