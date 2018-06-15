@@ -10,30 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="HomeView_Loaded">
 
-    <UserControl.Resources>
-        <Storyboard x:Key="MenuOpen">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="50"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0:0.5" Value="150"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="MenuClose">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
-                <EasingDoubleKeyFrame KeyTime="0" Value="150"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0:0.5" Value="50"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
-    </UserControl.Resources>
-    <UserControl.Triggers>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
-            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
-        </EventTrigger>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
-            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
-        </EventTrigger>
-    </UserControl.Triggers>
-
-    <Grid Background="#FFECECEC">
+    <Grid Background="#EFEFEF">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
@@ -44,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Topbar -->
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#1f54a8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
@@ -57,17 +34,17 @@
 
             <TextBlock
                 Text="Nudel Home"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
                 FontSize="22"
+                Margin="10"
                 Foreground="White"
                 Grid.Column="0" />
 
             <TextBox
                 Grid.Column="1"
                 materialDesign:HintAssist.Hint="Search"
-                FontSize="22"
+                FontSize="18"
                 Foreground="White"
+                Margin="10"
                 BorderBrush="#89FFFFFF"
                 VerticalAlignment="Center"
                 Text="Search for events here..." />
@@ -98,7 +75,7 @@
                 <materialDesign:PopupBox
                     HorizontalAlignment="Right"
                     Margin="10"
-                    Foreground="#FFB8B8B8"
+                    Foreground="White"
                     PlacementMode="BottomAndAlignRightEdges"
                     StaysOpen="False">
 
@@ -116,45 +93,43 @@
         </Grid>
 
         <!-- Sidebar -->
-        <StackPanel Grid.Row="1" Grid.Column="0">
+        <StackPanel Grid.Row="1" Grid.Column="0" Background="#dbdbdb">
             <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 
                 <ListViewItem Height="50">
-                    <DockPanel HorizontalAlignment="Stretch" Width="Auto">
+                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
                         <materialDesign:PackIcon
-                            DockPanel.Dock="Left"
                             Kind="ViewDashboard"
                             Width="Auto"
                             Height="Auto"
                             VerticalAlignment="Center"
-                            Foreground="White"
+                            Foreground="#333"
                             Margin="3" />
                         
                         <TextBlock
-                            DockPanel.Dock="Top"
                             Text="Home"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
-                            FontSize="20" Foreground="#FFB8B8B8"></TextBlock>
-                    </DockPanel>
+                            FontSize="20" Foreground="#333"></TextBlock>
+                    </StackPanel>
                 </ListViewItem>
 
                 <ListViewItem Height="50">
-                    <DockPanel HorizontalAlignment="Stretch">
+                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
                         <materialDesign:PackIcon
                             Kind="Calendar"
                             Width="Auto"
                             Height="Auto"
                             VerticalAlignment="Center"
-                            Foreground="White"
+                            Foreground="#333"
                             Margin="3" />
 
                         <TextBlock
                             Text="Events"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
-                            FontSize="20" Foreground="#FFB8B8B8"></TextBlock>
-                    </DockPanel>
+                            FontSize="20" Foreground="#333"></TextBlock>
+                    </StackPanel>
                 </ListViewItem>
 
                 <ListViewItem Height="50">
@@ -164,21 +139,21 @@
                             Width="Auto"
                             Height="Auto"
                             VerticalAlignment="Center"
-                            Foreground="White"
+                            Foreground="#333"
                             Margin="3" />
 
                         <TextBlock
                             Text="Me"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
-                            FontSize="20" Foreground="#FFB8B8B8"></TextBlock>
+                            FontSize="20" Foreground="#333"></TextBlock>
                     </StackPanel>
                 </ListViewItem>
             </ListView>
         </StackPanel>
 
         <!-- Content -->
-        <Grid Grid.Row="1" Grid.Column="1" Margin="55 0 0 0">
+        <Grid Grid.Row="1" Grid.Column="1">
             <ContentPresenter Content="{Binding Path=CurrentView}" />
         </Grid>
     </Grid>

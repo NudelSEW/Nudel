@@ -14,19 +14,26 @@ namespace Nudel.Client.Views
     /// </summary>
     public partial class HomeView : UserControl
     {
+        public MainWindow MainWindow { get; set; }
         public MainViewModel MainViewModel { get; set; }
 
         public HomeView()
         {
             InitializeComponent();
             DataContext = new HomeViewModel();
-
-            MainViewModel = (MainViewModel)Window.GetWindow(this).DataContext;
         }
 
         private void HomeView_Loaded(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
+            MainWindow = (MainWindow)Window.GetWindow(this);
+            MainViewModel = (MainViewModel)MainWindow.DataContext;
+
+            MainWindow.Width = 1200;
+            MainWindow.Height = 800;
+            MainWindow.CenterWindowOnScreen();
+
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
+            {
                 Request request = new Request
                 {
                     Type = RequestResponseType.FindCurrentUser,
@@ -50,7 +57,6 @@ namespace Nudel.Client.Views
 
             MainModel.ModelChanged += handler;
         }
-
 
         private void Logout(object sender, RoutedEventArgs e)
         {
