@@ -39,12 +39,19 @@ namespace JustConnect.Tcp
 
             if (!IsConnected)
             {
-                socket.Connect(ip, Port);
-                socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, socket);
+                try
+                {
+                    socket.Connect(ip, Port);
+                    socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, Receive, socket);
 
-                IsConnected = true;
+                    IsConnected = true;
 
-                Log?.Invoke("Client connected");
+                    Log?.Invoke("Client connected");
+                }
+                catch (SocketException e)
+                {
+                    Log?.Invoke("Could not connect to server");
+                }
             }
             else
             {
