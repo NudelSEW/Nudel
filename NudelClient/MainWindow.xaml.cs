@@ -33,5 +33,21 @@ namespace Nudel.Client
         {
             NetworkListener.Stop();
         }
+
+        private void Log_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            log.ScrollToEnd();
+        }
+
+
+        public void CenterWindowOnScreen()
+        {
+            double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+            double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+            double windowWidth = this.Width;
+            double windowHeight = this.Height;
+            Left = (screenWidth / 2) - (windowWidth / 2);
+            Top = (screenHeight / 2) - (windowHeight / 2);
+        }
     }
 }

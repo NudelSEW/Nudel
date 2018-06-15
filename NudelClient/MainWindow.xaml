@@ -10,12 +10,15 @@
         Title="MainWindow"
         Width="800"
         Height="450"
+        MinWidth="800"
+        MinHeight="400"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -31,7 +34,7 @@
         <Border Name="logSection" Grid.Row="1" Padding="10" Background="#EEEEEE">
             <StackPanel Orientation="Vertical">
                 <Label FontWeight="Bold">Log</Label>
-                <TextBox Name="log" IsReadOnly="True" MinLines="3" MaxLines="3" />
+                <TextBox Name="log" IsReadOnly="True" MinLines="3" MaxLines="3" TextChanged="Log_TextChanged" />
             </StackPanel>
         </Border>
     </Grid>
