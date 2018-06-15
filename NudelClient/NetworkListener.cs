@@ -85,11 +85,20 @@ namespace Nudel.Client
                 Log?.Invoke($"Received Response of Type: {response.Type}");
 
                 RequestResponseType type = response.Type;
-                Result result;
+                Result result = response.Result;
 
                 if (type == RequestResponseType.Register ||
                     type == RequestResponseType.Login)
                 {
+                    if (result.Type == ResultType.Error)
+                    {
+                        if (result.ErrorCode == 100)
+                        {
+                            Log?.Invoke("User not found");
+                            return;
+                        }
+                    }
+
                     MainModel.SessionToken = response.Result.SessionToken;
                 }
                 else if (type == RequestResponseType.Logout)
@@ -124,6 +133,15 @@ namespace Nudel.Client
                 }
                 else if (type == RequestResponseType.FindCurrentUser)
                 {
+                    if (result.Type == ResultType.Error)
+                    {
+                        if (result.ErrorCode == 100)
+                        {
+                            Log?.Invoke("User not found");
+                            return;
+                        }
+                    }
+
                     MainModel.User = response.Result.FoundUser;
                 }
                 else if (type == RequestResponseType.FindUser)
