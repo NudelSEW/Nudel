@@ -1,4 +1,5 @@
-﻿using Nudel.BusinessObjects;
+﻿using MaterialDesignThemes.Wpf;
+using Nudel.BusinessObjects;
 using Nudel.Client.Model;
 using Nudel.Client.ViewModels;
 using System;
@@ -27,27 +28,30 @@ namespace Nudel.Client.Views
                 if (fieldName == "User")
                 {
                     User user = MainModel.User;
-                    
-                    if (user.JoinedEvents != null)
+
+                    if (user != null)
                     {
-                        foreach (Event @event in MainModel.User.JoinedEvents)
+                        if (user.JoinedEvents != null)
                         {
-                            mainGrid.Children.Add(new EventCardView
+                            foreach (Event @event in MainModel.User.JoinedEvents)
                             {
-                                DataContext = new EventCardViewModel
+                                events.Children.Add(new EventCardView
                                 {
-                                    Title = @event.Title,
-                                    Description = @event.Description
-                                }
+                                    DataContext = new EventCardViewModel
+                                    {
+                                        Title = @event.Title,
+                                        Description = @event.Description
+                                    }
+                                });
+                            }
+                        }
+                        else
+                        {
+                            mainGrid.Children.Add(new Label
+                            {
+                                Content = "There are no events yet..."
                             });
                         }
-                    }
-                    else
-                    {
-                        mainGrid.Children.Add(new Label
-                        {
-                            Content = "There are no events yet..."
-                        });
                     }
                 }
             };
@@ -73,6 +77,11 @@ namespace Nudel.Client.Views
             //ModelChangedHandler
 
             //Send
+        }
+
+        private void CreateEvent_DialogClosing(object sender, DialogClosingEventArgs e)
+        {
+
         }
     }
 }
