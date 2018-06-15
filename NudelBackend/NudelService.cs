@@ -353,6 +353,13 @@ namespace Nudel.Backend
             Result result = CheckSessionTokenProvided();
             if (result.Type == ResultType.Error) return result;
 
+            User foundUser = userCollection.Find(x => x.ID == user.ID).FirstOrDefault();
+
+            if (foundUser == null)
+            {
+                return Result.Error(100, "User not found");
+            }
+
             return new Result
             {
                 Type = ResultType.Success,
